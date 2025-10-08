@@ -51,6 +51,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         //构建一个转换器
         MappingJackson2HttpMessageConverter mc=new MappingJackson2HttpMessageConverter();
         //设置转化器规则
+        //处理日期格式的转换 --只是其中一种
         mc.setObjectMapper(new JacksonObjectMapper());
         //吧这个消息转化器添加到converters中
         converters.add(0,mc);

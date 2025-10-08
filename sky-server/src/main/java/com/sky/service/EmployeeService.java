@@ -6,6 +6,7 @@ import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
+import org.apache.ibatis.annotations.Select;
 
 public interface EmployeeService {
 
@@ -16,6 +17,10 @@ public interface EmployeeService {
      */
     Employee login(EmployeeLoginDTO employeeLoginDTO);
 
+    /**
+     * 新增员工
+     * @param employeeDTO
+     */
     void add(EmployeeDTO employeeDTO);
 
     /**
@@ -24,4 +29,11 @@ public interface EmployeeService {
      * @return
      */
     PageResult page(EmployeePageQueryDTO employeePageQueryDTO);
+
+    void updateStatus(Integer status, Long id);
+
+    Employee findById(Long id);
+
+    void updateEmployee(EmployeeDTO employeeDTO);
+
 }

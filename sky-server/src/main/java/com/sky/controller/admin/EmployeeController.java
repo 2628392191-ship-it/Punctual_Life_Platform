@@ -12,6 +12,7 @@ import com.sky.result.Result;
 import com.sky.service.EmployeeService;
 import com.sky.utils.JwtUtil;
 import com.sky.vo.EmployeeLoginVO;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/admin/employee")
+@Api("员工管理")
 @Slf4j
 public class EmployeeController {
 
@@ -76,6 +78,12 @@ public class EmployeeController {
         return Result.success();
     }
 
+
+    /**
+     * 新增员工
+     * @param employeeDTO
+     * @return
+     */
    @ApiOperation("添加员工")
     @PostMapping
     public Result add(@RequestBody EmployeeDTO employeeDTO){
@@ -83,6 +91,11 @@ public class EmployeeController {
         return Result.success();
     }
 
+    /**
+     * 分页查询
+     * @param employeePageQueryDTO
+     * @return
+     */
     @ApiOperation("员工分页")
     @GetMapping("/page")
     public Result<PageResult> page(EmployeePageQueryDTO employeePageQueryDTO){
@@ -90,6 +103,40 @@ public class EmployeeController {
           PageResult pageResult = employeeService.page(employeePageQueryDTO);
           return Result.success(pageResult);
     }
+
+    /**
+     * 启用/禁用员工账号
+     * @param status
+     * @param id
+     * @return
+     */
+    @ApiOperation("员工状态禁用/启用")
+    @PostMapping("/status/{status}")
+   public Result updateStatus(@PathVariable Integer status, Long id){
+        log.info("员工状态禁用/启用：{}", status);
+         employeeService.updateStatus(status, id);
+         return Result.success();
+    }
+
+    @ApiOperation("根据ID查询员工信息")
+    @GetMapping("/{id}")
+    public Result<Employee> getById(@PathVariable Long id){
+        log.info("员工信息查询：{}", id);
+        Employee byId = employeeService.findById(id);
+        if(byId == null) return null;
+        byId.setPassword("*******");
+        return  Result.success(byId);
+    }
+
+
+    @ApiOperation("员工信息修改")
+    @PutMapping
+    public Result updateEmployee(@RequestBody EmployeeDTO employeeDTO){
+        log.info("员工信息修改：{}", employeeDTO);
+         employeeService.updateEmployee(employeeDTO);
+        return  Result.success();
+    }
+
 
 
 }

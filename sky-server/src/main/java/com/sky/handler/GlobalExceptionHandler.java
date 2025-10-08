@@ -27,6 +27,7 @@ public class GlobalExceptionHandler {
         return Result.error(ex.getMessage());
     }
 
+    //处理录入的用户名已存在报出的异常
     @ExceptionHandler
     public Result  handleSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException ex){
         String message = ex.getMessage();

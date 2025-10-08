@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -56,6 +57,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new PasswordErrorException(MessageConstant.PASSWORD_ERROR);
         }
 
+        //判断员工状态
         if (employee.getStatus() == StatusConstant.DISABLE) {
             //账号被锁定
             throw new AccountLockedException(MessageConstant.ACCOUNT_LOCKED);
@@ -85,4 +87,31 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<Employee> records = pa.getResult();
         return new PageResult(total, records);
     }
+
+    @Override
+    public void updateStatus(Integer status, Long id){
+        Employee build = Employee.builder()
+                .status(status)
+                .id(id)
+                .build();
+        employeeMapper.updateInfo(build);
+    }
+
+    @Override
+    public Employee findById(Long id) {
+        return employeeMapper.getById(id);
+    }
+
+
+    @Override
+    public void updateEmployee(EmployeeDTO  employeeDTO) {
+        Employee employee = Employee.builder().build();
+        BeanUtils.copyProperties(employeeDTO, employee);
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(BaseContext.getCurrentId());
+        employeeMapper.updateInfo(employee);
+    }
+
+
+
 }
