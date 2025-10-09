@@ -6,6 +6,8 @@ import com.sky.entity.Category;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 
+import java.util.List;
+
 public interface CategoryService {
 
     void addCategory(CategoryDTO categoryDTO);
@@ -17,4 +19,6 @@ public interface CategoryService {
     void updateCategory(CategoryDTO categoryDTO);
 
     void deleteCategory(Long id);
+
+    List<Category> list(Integer  type);
 }

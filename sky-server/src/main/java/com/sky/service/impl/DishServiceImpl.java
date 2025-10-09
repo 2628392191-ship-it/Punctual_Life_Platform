@@ -123,23 +123,38 @@ public class DishServiceImpl implements DishService {
     /**
      * 修改菜品
      * @param dishDTO
+     * 修改菜品和菜品口味数据
      */
     @Override
     public void updateDish(DishDTO dishDTO) {
         Dish dish = Dish.builder().build();
         BeanUtils.copyProperties(dishDTO, dish);
         dishMapper.updateDish(dish);
-        //删除原有的口味数据
-        dishFlavorMapper.deleteByDishId(dishDTO.getId());
         //重新插入口味数据
         List<DishFlavor> list=dishDTO.getFlavors();
-        if(list!=null&&!list.isEmpty())
+        //此处通过判断传来的数据是否为空，若为空则不插，若不为空则进行删除再重新插入
+        if(list!=null&&!list.isEmpty()) {
+            //删除原有的口味数据
+            dishFlavorMapper.deleteByDishId(dishDTO.getId());
             list.forEach(dishFlavor -> {
                 dishFlavor.setDishId(dishDTO.getId());
             });
-         dishFlavorMapper.insertBatch(list);
-
+            dishFlavorMapper.insertBatch(list);
+        }
+        else return;
     }
 
-
+    /**
+     * 停售/起售菜品
+     * @param status
+     * @param id
+     */
+    @Override
+    public void startOrStop(Integer status, Long id) {
+        Dish dish = Dish.builder()
+                .status(status)
+                .id(id)
+                .build();
+        dishMapper.updateDishStatus(dish);
+    }
 }

@@ -30,6 +30,15 @@ public interface DishMapper {
     @Select("select * from Dish where id=#{id}")
     Dish findDishById(Long id);
 
+    //批量修改菜品且要先删除原口味表的数据
     @AutoFill(value = OperationType.UPDATE)
     void updateDish(Dish dish);
+
+    //修改菜品状态(不能和批量修改一起使用，因为批量修改涉及到口味表的删除的添加)
+    @AutoFill(value = OperationType.UPDATE)
+    @Update("update dish set status=#{status},update_time=#{updateTime} where id=#{id}")
+    void updateDishStatus(Dish dish);
+
+
+
 }

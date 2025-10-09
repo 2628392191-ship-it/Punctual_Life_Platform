@@ -10,6 +10,7 @@ import com.sky.mapper.CategoryMapper;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.CategoryService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -86,7 +87,14 @@ public class CategoryServiceImpl implements CategoryService {
         categoryMapper.deleteById(id);
     }
 
-
+     /**
+     * 查询分类
+     * @return
+     */
+   @Override
+    public List< Category> list(Integer type){
+       return categoryMapper.list(type);
+   }
 
 
 }
