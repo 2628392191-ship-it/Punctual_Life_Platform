@@ -46,6 +46,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
 
     //配置转化器，将json数据格式转换成对象
+    //转换日期格式的配置
     protected void extendMessageConverters(List<HttpMessageConverter<?>> converters){
         log.info("扩展消息转换器...");
         //构建一个转换器

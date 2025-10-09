@@ -3,6 +3,7 @@ package com.sky.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
+import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
@@ -67,18 +68,24 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employee;
     }
 
+    /**
+     * 新增员工
+     * @param employeeDTO
+     */
     @Override
     public void add(EmployeeDTO employeeDTO) {
         Employee employee = Employee.builder().build();
         BeanUtils.copyProperties(employeeDTO, employee);
         employee.setStatus(1);
-        employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
-        employee.setCreateUser(BaseContext.getCurrentId());
-        employee.setUpdateUser(BaseContext.getCurrentId());
+        employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
         employeeMapper.add(employee);
     }
 
-
+    /**
+     * 分页查询
+     * @param employeePageQueryDTO
+     * @return
+     */
     @Override
     public PageResult page(EmployeePageQueryDTO employeePageQueryDTO) {
         PageHelper.startPage(employeePageQueryDTO.getPage(), employeePageQueryDTO.getPageSize());
@@ -88,6 +95,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         return new PageResult(total, records);
     }
 
+    /**
+     * 启用禁用员工账号
+     * @param status
+     * @param id
+     */
     @Override
     public void updateStatus(Integer status, Long id){
         Employee build = Employee.builder()
@@ -97,18 +109,24 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeMapper.updateInfo(build);
     }
 
+    /**
+     * 根据id查询员工信息
+     * @param id
+     * @return
+     */
     @Override
     public Employee findById(Long id) {
         return employeeMapper.getById(id);
     }
 
-
+    /**
+     * 编辑员工信息
+     * @param employeeDTO
+     */
     @Override
     public void updateEmployee(EmployeeDTO  employeeDTO) {
         Employee employee = Employee.builder().build();
         BeanUtils.copyProperties(employeeDTO, employee);
-        employee.setUpdateTime(LocalDateTime.now());
-        employee.setUpdateUser(BaseContext.getCurrentId());
         employeeMapper.updateInfo(employee);
     }
 
