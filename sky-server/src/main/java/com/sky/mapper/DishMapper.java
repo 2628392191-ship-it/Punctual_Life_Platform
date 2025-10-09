@@ -1,0 +1,35 @@
+package com.sky.mapper;
+
+
+import com.github.pagehelper.Page;
+import com.sky.annotation.AutoFill;
+import com.sky.dto.DishPageQueryDTO;
+import com.sky.entity.Dish;
+import com.sky.enumeration.OperationType;
+import com.sky.vo.DishVO;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
+
+@Mapper
+public interface DishMapper {
+    //主键回填需要@Options注解实现，或者通过xml也可以
+    //第一个为数据库中的id字段，第二个为实体类中的id字段
+    @Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
+    @AutoFill(value = OperationType.INSERT)
+    @Insert("insert into dish (name, category_id, price, status, create_time, update_time, create_user, update_user) values (#{name}, #{categoryId}, #{price}, #{status}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser})")
+    int insertDish(Dish dish);
+
+    Page<DishVO> PageQuery(DishPageQueryDTO dishPageQueryDTO);
+
+    //通过id批量删除菜品
+    @Delete("delete from dish where id in (#{id})")
+    void DeleteById(Long ids);
+
+    //通过id查询菜品
+    @Select("select * from Dish where id=#{id}")
+    Dish findDishById(Long id);
+
+    @AutoFill(value = OperationType.UPDATE)
+    void updateDish(Dish dish);
+}
