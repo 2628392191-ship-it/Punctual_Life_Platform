@@ -113,11 +113,11 @@ public class DishServiceImpl implements DishService {
      * @return
      */
     @Override
-    public DishDTO findById(Long id){
-        DishDTO dishDTO = new DishDTO();
-        BeanUtils.copyProperties(dishMapper.findDishById(id), dishDTO);
-        dishDTO.setFlavors(dishFlavorMapper.findByDishId(id));
-        return dishDTO;
+    public DishVO findById(Long id){
+        DishVO dishVO = new DishVO();
+        BeanUtils.copyProperties(dishMapper.findDishById(id), dishVO);
+        dishVO.setFlavors(dishFlavorMapper.findByDishId(id));
+        return dishVO;
     }
 
     /**
