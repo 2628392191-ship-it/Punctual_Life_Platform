@@ -39,6 +39,8 @@ public interface DishMapper {
     @Update("update dish set status=#{status},update_time=#{updateTime} where id=#{id}")
     void updateDishStatus(Dish dish);
 
-
+    //根据分类id查询起售菜品
+    @Select("select * from dish where category_id=#{categoryId} and status=#{status}")
+    List<Dish> findDish(Dish dish);
 
 }

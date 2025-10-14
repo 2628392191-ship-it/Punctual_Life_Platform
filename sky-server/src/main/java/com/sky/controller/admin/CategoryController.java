@@ -95,11 +95,16 @@ public class CategoryController {
         return Result.success();
     }
 
-    @ApiOperation("通过类型查询分类")
+    @ApiOperation("通过分类类型查询分类")
     @GetMapping("/list")
     public Result<List<Category>> list(Integer type) {
         log.info("查询分类：{}", type);
+        if(type == null) {
+            log.warn("警告：type参数为空，将查询所有分类或返回空结果");
+            // 根据业务逻辑决定如何处理 null 参数
+        }
         List<Category> list = categoryService.list(type);
+        log.info("查询到 {} 条分类数据", list.size());
         return Result.success(list);
     }
 

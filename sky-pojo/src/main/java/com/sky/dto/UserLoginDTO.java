@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 @Data
 public class UserLoginDTO implements Serializable {
-
+    //微信用户登录授权码
     private String code;
 
 }

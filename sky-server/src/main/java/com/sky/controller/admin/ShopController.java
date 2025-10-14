@@ -1,6 +1,7 @@
 package com.sky.controller.admin;
 
 import com.sky.constant.MessageConstant;
+import com.sky.constant.StatusConstant;
 import com.sky.result.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,7 +23,7 @@ public class ShopController {
     @PutMapping("/{status}")
     public Result setStatus(@PathVariable Integer status){
      log.info("设置店铺营业状态：{}", status == 1 ? "营业中" : "打烊中");
-     redisTemplate.opsForValue().set("status", status);
+        redisTemplate.opsForValue().set("status", status);
      return Result.success();
     }
     //这两个方法一个是通过修改店铺状态来操作后台数据，另一个通过查询店铺营业状态来展示前端

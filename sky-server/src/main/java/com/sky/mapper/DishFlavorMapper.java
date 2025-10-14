@@ -13,7 +13,7 @@ import java.util.List;
 @Mapper
 public interface DishFlavorMapper {
 
-    @AutoFill(value = OperationType.INSERT)
+
     //批量插入口味数据
     void insertBatch(List<DishFlavor> flavors);
 

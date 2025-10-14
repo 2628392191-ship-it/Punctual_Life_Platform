@@ -15,6 +15,7 @@ import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
+import com.sky.vo.DishItemVO;
 import com.sky.vo.DishVO;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
@@ -22,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -70,6 +72,7 @@ public class DishServiceImpl implements DishService {
      */
     @Override
     public PageResult PageQueryDish(DishPageQueryDTO dishPageQueryDTO) {
+
         //设置查询是几页，每页多少条
         PageHelper.startPage(dishPageQueryDTO.getPage(), dishPageQueryDTO.getPageSize());
         Page<DishVO> pa=dishMapper.PageQuery(dishPageQueryDTO);
@@ -157,4 +160,29 @@ public class DishServiceImpl implements DishService {
                 .build();
         dishMapper.updateDishStatus(dish);
     }
+
+    /**
+     * 根据分类id查询菜品
+     * @param dished
+     * @return
+     */
+    @Override
+    public List<DishVO> DishWithFlavors(Dish dished) {
+        List<Dish> dish = dishMapper.findDish(dished);
+        List<DishVO> dishVO = new ArrayList<>();
+        for (Dish dish1 : dish) {
+            DishVO dishVO1 =DishVO.builder().build();
+            //将dish1的数据复制给dishVO1
+            BeanUtils.copyProperties(dish1, dishVO1);
+            //设置DishVO里的flavors集合数据
+            dishVO1.setFlavors(dishFlavorMapper.findByDishId(dish1.getId()));
+            //将dishVO1添加到dishVO集合中
+            dishVO.add(dishVO1);
+        }
+        return dishVO;
+    }
+
+
+
+
 }
