@@ -80,7 +80,7 @@ public class DishController {
     public Result updateDish(@RequestBody DishDTO dishDTO){
         log.info("修改菜品：{}", dishDTO);
         dishService.updateDish(dishDTO);
-        CleanCache("dish_*");
+        CleanCache("dish_"+dishDTO.getId());
         return Result.success();
     }
 

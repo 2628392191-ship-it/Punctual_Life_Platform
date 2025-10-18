@@ -16,4 +16,8 @@ public interface SetmealDishMapper {
 
    //通过套餐id查询菜品ids
    public List<DishItemVO> getSetmealDishBySetmealId(Long SetmealId);
+
+   //批量插入
+   public int insertBatch(List<SetmealDish> setmealDishes);
+
 }

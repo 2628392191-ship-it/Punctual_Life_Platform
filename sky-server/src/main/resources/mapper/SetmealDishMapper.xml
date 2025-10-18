@@ -14,4 +14,10 @@
         left join  dish on setmeal_dish.dish_id=dish.id
         where setmeal_id=#{SetmealId}
     </select>
+    <insert id="insertBatch" >
+        insert into setmeal_dish (setmeal_id,dish_id,copies,name,price) values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.setmealId},#{item.dishId},#{item.copies},#{item.name},#{item.price})
+        </foreach>
+    </insert>
 </mapper>

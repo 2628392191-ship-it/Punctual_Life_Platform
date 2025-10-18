@@ -12,4 +12,6 @@ public interface SetmealService {
     List<Setmeal> findSetmealByCategoryId(Setmeal setmeal);
 
     List<DishItemVO> getDishBySetmealbyId(Long SetmealId);
+
+    void addSetmeal(SetmealDTO setmealDTO);
 }
