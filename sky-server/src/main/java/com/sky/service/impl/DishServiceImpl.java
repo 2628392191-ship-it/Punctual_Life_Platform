@@ -21,6 +21,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class DishServiceImpl implements DishService {
      * 操作两张表，dish和dish_flavor
      * 使用集合插入口味表
      */
+    @Transactional
     public void addDish(DishDTO dishDTO) {
          Dish dish =Dish.builder()
                  .build();
@@ -88,6 +90,7 @@ public class DishServiceImpl implements DishService {
      * 被套餐关联的菜品不能删除
      * 删除菜品后，关联的口味数据也需要删除掉
      */
+    @Transactional
     @Override
     public void deleteDish(List<Long> ids) {
         //1.先看是否有起售的菜品，若有则无法删除
@@ -115,6 +118,7 @@ public class DishServiceImpl implements DishService {
      * @param id
      * @return
      */
+    @Transactional
     @Override
     public DishVO findById(Long id){
         DishVO dishVO = new DishVO();
@@ -128,6 +132,7 @@ public class DishServiceImpl implements DishService {
      * @param dishDTO
      * 修改菜品和菜品口味数据
      */
+    @Transactional
     @Override
     public void updateDish(DishDTO dishDTO) {
         Dish dish = Dish.builder().build();

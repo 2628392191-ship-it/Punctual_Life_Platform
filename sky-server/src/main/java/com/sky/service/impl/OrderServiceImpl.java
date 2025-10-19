@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,6 +37,7 @@ public class OrderServiceImpl implements OrderService {
     private OrderDetailMapper orderDetailMapper;
 
 
+    @Transactional
     @Override
     public OrderSubmitVO submit(OrdersSubmitDTO ordersSubmitDTO){
         //创建订单对象，并准备实施添加
@@ -82,6 +84,7 @@ public class OrderServiceImpl implements OrderService {
         build.setUserId(BaseContext.getCurrentId());
         build.setOrderTime(LocalDateTime.now());
         build.setStatus(Orders.PENDING_PAYMENT);
+        build.setUserName(user.getName());
         /* 补充数据
          * 设置id：自增id，不用设置
          * 设置number：订单号，使用UUID Done!

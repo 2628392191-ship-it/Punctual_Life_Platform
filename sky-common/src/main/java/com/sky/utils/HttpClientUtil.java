@@ -41,12 +41,14 @@ public class HttpClientUtil {
         CloseableHttpResponse response = null;
 
         try{
+            //查看用户登录时的appid,secret,js_code,grant_Type是否存在
             URIBuilder builder = new URIBuilder(url);
             if(paramMap != null){
                 for (String key : paramMap.keySet()) {
                     builder.addParameter(key,paramMap.get(key));
                 }
             }
+            //请求路径
             URI uri = builder.build();
 
             //创建GET请求
@@ -57,6 +59,7 @@ public class HttpClientUtil {
 
             //判断响应状态
             if(response.getStatusLine().getStatusCode() == 200){
+                //返回openid（这是用户唯一标识）和session_key给用户
                 result = EntityUtils.toString(response.getEntity(),"UTF-8");
             }
         }catch (Exception e){
