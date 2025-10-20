@@ -9,6 +9,10 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <artifactId>sky-demo</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>demo1</module>
+    </modules>
 
     <dependencies>
 

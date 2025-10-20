@@ -1,11 +1,15 @@
 package com.sky.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sky.dto.SetmealDTO;
+import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
 import com.sky.mapper.SetmealDishMapper;
 import com.sky.mapper.SetmealMapper;
+import com.sky.result.PageResult;
 import com.sky.service.SetmealService;
 import com.sky.vo.DishItemVO;
 import com.sky.vo.DishVO;
@@ -54,5 +58,23 @@ public class SetmealServiceImpl implements SetmealService {
         setmealDishMapper.insertBatch(setmealDishes);
     }
 
+
+    @Override
+    public SetmealVO getById(Long id){
+        Setmeal byId = setmealMapper.getById(id);
+        SetmealVO setmealVO = SetmealVO.builder().build();
+        BeanUtils.copyProperties(byId, setmealVO);
+        List<SetmealDish> setmealDishBySetmealId = setmealDishMapper.findSetmealDishBySetmealId(id);
+        setmealVO.setSetmealDishes(setmealDishBySetmealId);
+        return setmealVO;
+    }
+
+
+    @Override
+    public PageResult pageQuery(SetmealPageQueryDTO setmealPageQueryDTO) {
+        PageHelper.startPage(setmealPageQueryDTO.getPage(), setmealPageQueryDTO.getPageSize());
+        Page<Setmeal> pa= setmealMapper.pageQuery(setmealPageQueryDTO);
+        return new PageResult(pa.getTotal(), pa.getResult());
+    }
 
 }

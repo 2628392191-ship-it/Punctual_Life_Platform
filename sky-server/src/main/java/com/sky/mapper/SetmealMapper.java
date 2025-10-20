@@ -1,6 +1,8 @@
 package com.sky.mapper;
 
+import com.github.pagehelper.Page;
 import com.sky.annotation.AutoFill;
+import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.Setmeal;
 import com.sky.enumeration.OperationType;
@@ -14,9 +16,8 @@ import java.util.List;
 public interface SetmealMapper {
     /**
      * 动态条件查询套餐
-     * @param setmeal
      * @return
-     */
+     * */
 
     public List<Setmeal> list(Setmeal setmeal);
 
@@ -34,6 +35,8 @@ public interface SetmealMapper {
 
     @Select("select * from setmeal where id = #{id}")
     Setmeal getById(Long id);
+
+    Page<Setmeal> pageQuery(SetmealPageQueryDTO setmealPageQueryDTO);
 
 
 }

@@ -2,7 +2,9 @@ package com.sky.controller.admin;
 
 import com.sky.constant.StatusConstant;
 import com.sky.dto.SetmealDTO;
+import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
+import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.DishService;
 import com.sky.service.SetmealService;
@@ -30,19 +32,6 @@ public class SetmealController {
     @Autowired
     private CacheManager cacheManager;
 
-
-    @ApiOperation("查询分类id的套餐")
-    @GetMapping("/list")
-    public Result<List<Setmeal>> list(Long categoryId) {
-        log.info("查询套餐对应的分类id：{}", categoryId);
-        Setmeal setmeal =Setmeal.builder()
-                .categoryId(categoryId)
-                .status(StatusConstant.ENABLE)
-                .build();
-        List<Setmeal>  setmealVOList =setmealService.findSetmealByCategoryId(setmeal);
-        return Result.success(setmealVOList);
-    }
-
     @CacheEvict(cacheNames = "setmeal",allEntries = true)
     @ApiOperation("添加套餐")
     @PostMapping
@@ -61,8 +50,20 @@ public class SetmealController {
         return Result.success();
     }
 
+    @ApiOperation("分页查询套餐")
+    @GetMapping("/page")
+    public Result<PageResult> page(SetmealPageQueryDTO setmealPageQueryDTO) {
+        log.info("分页查询：{}", setmealPageQueryDTO);
+        PageResult pageResult = setmealService.pageQuery(setmealPageQueryDTO);
+        return Result.success(pageResult);
+    }
 
-
-
+    @ApiOperation("根据套餐id查询套餐")
+    @GetMapping("/{id}")
+    public Result<SetmealVO> getById(@PathVariable Long id) {
+        log.info("查询套餐id：{}", id);
+        SetmealVO setmealVO = setmealService.getById(id);
+        return Result.success(setmealVO);
+    }
 
 }
