@@ -13,7 +13,7 @@ public interface shoppingCartMapper {
     @Insert("insert into shopping_cart (name,image,dish_id,setmeal_id,dish_flavor,number,amount,create_time,user_id) values (#{name},#{image},#{dishId},#{setmealId},#{dishFlavor},#{number},#{amount},#{createTime},#{userId})")
     int addCart(ShoppingCart shoppingCart);
 
-    //查询操作
+    //查询操作（每一条购物车中的数据
     //这里采用集合是为了后续方便能够展示购物车的数据
     List<ShoppingCart> list(ShoppingCart shoppingCart);
 
@@ -21,6 +21,9 @@ public interface shoppingCartMapper {
     int update(ShoppingCart shoppingCart);
 
     @Delete("delete from shopping_cart where user_id = #{userId}")
-    int delete(Long userId);
+    int deleteByUserId(Long userId);
+
+    @Delete("delete from shopping_cart where id = #{id}")
+    int deleteById(Long id);
 
 }

@@ -1,11 +1,16 @@
 package com.sky.service.impl;
 
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sky.constant.MessageConstant;
+import com.sky.constant.StatusConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.*;
 import com.sky.entity.*;
+import com.sky.exception.AccountNotFoundException;
+import com.sky.exception.OrderBusinessException;
 import com.sky.mapper.OrderDetailMapper;
 import com.sky.mapper.OrderMapper;
 import com.sky.mapper.UserMapper;
@@ -15,6 +20,8 @@ import com.sky.service.OrderService;
 import com.sky.service.shoppingCartService;
 import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
+import com.sky.vo.OrderVO;
+import com.sky.websocket.WebSocketServer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,6 +45,8 @@ public class OrderServiceImpl implements OrderService {
     private shoppingCartService shoppingCartService;
     @Autowired
     private OrderDetailMapper orderDetailMapper;
+    @Autowired
+    private WebSocketServer webSocketServer;
 
 
     @Transactional
@@ -81,7 +88,7 @@ public class OrderServiceImpl implements OrderService {
 
 
     /**
-     * 订单分页查询
+     * 管理端订单分页查询
      * @param ordersPageQueryDTO
      * @return
      */
@@ -93,15 +100,49 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * 订单取消
+     * 用户端订单分页查询
+     * @param ordersPageQueryDTO
+     * @return
+     * TODO::将OrderVO属性填充（并不需要单独设置一个mapper来处理这样做反而复杂化，而且也不需要）
+     * Done!!
+     */
+    @Override
+    public PageResult UserPageQuery(OrdersPageQueryDTO ordersPageQueryDTO) {
+        PageHelper.startPage(ordersPageQueryDTO.getPage(), ordersPageQueryDTO.getPageSize());
+        Page<Orders> pa=orderMapper.pageQuery(ordersPageQueryDTO);
+        List<OrderVO> orderVOS=new ArrayList<>();
+        if(pa!=null&&!pa.isEmpty()) {
+            orderVOS=pa.stream().map(order -> {
+                List<OrderDetail> byOrderId = orderDetailMapper.getByOrderId(order.getId());
+                OrderVO orderVO = new OrderVO();
+                BeanUtils.copyProperties(order,orderVO);
+                orderVO.setOrderDetailList(byOrderId);
+                return orderVO;
+            }).collect(Collectors.toList());
+        }
+        return new PageResult(pa.getTotal(), orderVOS);
+    }
+
+
+    /**
+     * 管理端订单取消
      * @param ordersCancelDTO
      */
     @Override
     public void cancel(OrdersCancelDTO ordersCancelDTO){
         Orders orders = orderMapper.getById(ordersCancelDTO.getId());
         orders.setStatus(Orders.CANCELLED);
-        orderMapper.cancel(orders);
+        orderMapper.update( orders);
     }
+
+    @Override
+    public void UserCancel(Long id){
+        Orders byId = orderMapper.getById(id);
+        byId.setStatus(Orders.CANCELLED);
+    }
+
+
+
 
     /**
      * 订单确认
@@ -111,7 +152,7 @@ public class OrderServiceImpl implements OrderService {
     public void complete(Long id){
         Orders orders = orderMapper.getById(id);
         orders.setStatus(Orders.COMPLETED);
-        orderMapper.complete(orders);
+        orderMapper.update( orders);
     }
 
     /**
@@ -122,8 +163,23 @@ public class OrderServiceImpl implements OrderService {
     public void reject(OrdersRejectionDTO rejectionDTO){
         Orders orders = orderMapper.getById(rejectionDTO.getId());
         orders.setCancelReason(rejectionDTO.getRejectionReason());
+        orders.setStatus(Orders.CANCELLED);
+        orders.setPayStatus(Orders.REFUND);
+        orders.setRejectionReason(rejectionDTO.getRejectionReason());
         orderMapper.reject(orders);
     }
+
+    /**
+     * 再来一单
+     * @param id
+     */
+    @Override
+    public void repetition(Long id){
+        Orders byId = orderMapper.getById(id);
+        orderMapper.insert(byId);
+    }
+
+
 
     /**
      * 订单确认
@@ -133,7 +189,7 @@ public class OrderServiceImpl implements OrderService {
     public void confirm(OrdersConfirmDTO ordersConfirmDTO){
         Orders orders = orderMapper.getById(ordersConfirmDTO.getId());
         orders.setStatus(Orders.CONFIRMED);
-        orderMapper.confirm(orders);
+        orderMapper.update(orders);
     }
 
     /**
@@ -142,8 +198,13 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public Orders details(Long id){
-        return orderMapper.getById(id);
+    public OrderVO details(Long id){
+        Orders orders = orderMapper.getById(id);
+        List<OrderDetail> byOrderId = orderDetailMapper.getByOrderId(id);
+        OrderVO orderVO = new OrderVO();
+        BeanUtils.copyProperties(orders,orderVO);
+        orderVO.setOrderDetailList(byOrderId);
+        return orderVO;
     }
 
     /**
@@ -154,7 +215,7 @@ public class OrderServiceImpl implements OrderService {
     public void delivery(Long id){
         Orders orders = orderMapper.getById(id);
         orders.setStatus(Orders.DELIVERY_IN_PROGRESS);
-        orderMapper.delivery(orders);
+        orderMapper.update(orders);
     }
 
 
@@ -169,15 +230,61 @@ public class OrderServiceImpl implements OrderService {
         if(statistics!=null&&!statistics.isEmpty()){
             statistics.forEach(orders -> {
                 Integer status = orders.getStatus();
-                if(Objects.equals(status, Orders.TO_BE_CONFIRMED)) orderStatisticsVO.setToBeConfirmed(orderStatisticsVO.getToBeConfirmed()+1);
-                if(Objects.equals(status, Orders.CONFIRMED)) orderStatisticsVO.setConfirmed(orderStatisticsVO.getConfirmed()+1);
-                if(Objects.equals(status, Orders.DELIVERY_IN_PROGRESS)) orderStatisticsVO.setDeliveryInProgress(orderStatisticsVO.getDeliveryInProgress()+1);
+                //判断是否为待接单状态
+                if(status.equals(Orders.TO_BE_CONFIRMED))
+                    orderStatisticsVO.setToBeConfirmed((orderStatisticsVO.getToBeConfirmed() == null ? 0 : orderStatisticsVO.getToBeConfirmed()) + 1);
+                //判断是否为已接单状态
+                if(status.equals(Orders.CONFIRMED))
+                    orderStatisticsVO.setConfirmed((orderStatisticsVO.getConfirmed() == null ? 0 : orderStatisticsVO.getConfirmed()) + 1);
+                //判断是否为派送中状态
+                if(status.equals(Orders.DELIVERY_IN_PROGRESS))
+                    orderStatisticsVO.setDeliveryInProgress((orderStatisticsVO.getDeliveryInProgress() == null ? 0 : orderStatisticsVO.getDeliveryInProgress()) + 1);
             });
         }
         return orderStatisticsVO;
     }
 
+    /**
+     * 用户催单
+     * @param id
+     */
+    @Override
+    public void reminder(Long id){
+        //先在数据库中查询是否有订单
+        Orders byId = orderMapper.getById(id);
+        if(byId==null) throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
 
+        //用户催单功能使用WebSocket进行推送
+        Map<String,Object> map=new HashMap<>();
+        map.put("type",2);
+        map.put("orderId",id);
+        map.put("content","订单号"+byId.getNumber());
+        webSocketServer.sendToAllClient(JSON.toJSONString(map));
+    }
+
+
+    @Override
+    public void PaySuccess(OrdersPaymentDTO ordersPaymentDTO) {
+        //支付成功后填充成功状态信息
+        Orders build = Orders.builder()
+                .status(Orders.TO_BE_CONFIRMED)
+                .payStatus(Orders.PAID)
+                .number(ordersPaymentDTO.getOrderNumber())
+                .build();
+        orderMapper.PaySuccess(build);
+
+         /**
+         * 推送消息
+         * type为消息类型，1为来单提醒，2为订单状态提醒
+         * orderId为订单Id
+         * content为消息内容
+         */
+        Map<String, Object> map = new HashMap<>();
+        map.put("type", 1);
+        map.put("orderId", build.getNumber());
+        map.put("content", "订单号" + build.getNumber());
+        webSocketServer.sendToAllClient(JSON.toJSONString(map));
+    }
 
 
 

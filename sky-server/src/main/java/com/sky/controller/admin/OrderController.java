@@ -10,6 +10,7 @@ import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
 import com.sky.vo.OrderStatisticsVO;
+import com.sky.vo.OrderVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -58,8 +59,8 @@ public class OrderController {
         return Result.success();
     }
 
-    @ApiOperation("拒绝订单")
-    @PutMapping("/reject")
+    @ApiOperation("拒单")
+    @PutMapping("/rejection")
     public Result reject(@RequestBody OrdersRejectionDTO rejectionDTO){
         log.info("拒绝订单");
         orderService.reject(rejectionDTO);
@@ -76,10 +77,10 @@ public class OrderController {
 
     @ApiOperation("查看订单详情")
     @GetMapping("/details/{id}")
-    public Result<Orders> details(@PathVariable Long id){
+    public Result<OrderVO> details(@PathVariable Long id){
         log.info("查看订单详情");
-        Orders orders = orderService.details(id);
-        return Result.success(orders);
+        OrderVO ordervo = orderService.details(id);
+        return Result.success(ordervo);
     }
 
     @ApiOperation("派送订单")

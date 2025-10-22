@@ -1,11 +1,13 @@
 package com.sky.service.impl;
 
 import ch.qos.logback.core.util.ContextUtil;
+import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.ShoppingCartDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.Setmeal;
 import com.sky.entity.ShoppingCart;
+import com.sky.exception.ShoppingCartBusinessException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealMapper;
@@ -47,8 +49,9 @@ public class shoppingCartServiceImpl implements shoppingCartService {
     public void addCart(ShoppingCartDTO shoppingCartDTO){
         ShoppingCart shoppingCart = ShoppingCart.builder().build();
         BeanUtils.copyProperties(shoppingCartDTO,shoppingCart);
+        //拿到购物车中的每一条数据
         List<ShoppingCart> list = shoppingcartmapper.list(shoppingCart);
-        //每次向购物车添加，判断是菜品或套餐或菜品+口味，只有一种菜被添加！
+        //每次向购物车添加，判断是菜品或套餐或菜品+口味，只有一种菜被添加！ --判断购物车里是否已经有类似的菜品或套餐
         //先判断集合数据是否存在，若不存在则实行添加操作，若有则数量+1
         if(list!=null&&!list.isEmpty()){
             //故使用list集合的第一个元素并判断是否是新数据
@@ -72,6 +75,25 @@ public class shoppingCartServiceImpl implements shoppingCartService {
 
     }
 
+    @Override
+    public void sub(ShoppingCartDTO shoppingCartDTO){
+        ShoppingCart shoppingCart = ShoppingCart.builder().build();
+        BeanUtils.copyProperties(shoppingCartDTO,shoppingCart);
+        List<ShoppingCart> list = shoppingcartmapper.list(shoppingCart);
+        if(list!=null&&!list.isEmpty()){
+            //若该数据存在，则进行数量的更新
+            if(list.get(0).getNumber()>1){
+                list.get(0).setNumber(list.get(0).getNumber()-1);
+                shoppingcartmapper.update(list.get(0));
+            }
+            else if(list.get(0).getNumber()==1){
+                shoppingcartmapper.deleteById(list.get(0).getId());
+            }
+            else throw new ShoppingCartBusinessException(MessageConstant.SHOPPING_CART_IS_NULL);
+        }
+    }
+
+
     /**
      * 获取购物车数据
      * @return
@@ -89,7 +111,7 @@ public class shoppingCartServiceImpl implements shoppingCartService {
      */
     @Override
     public void deleteCart(){
-        shoppingcartmapper.delete(BaseContext.getCurrentId());
+        shoppingcartmapper.deleteByUserId(BaseContext.getCurrentId());
     }
 
     /**

@@ -12,4 +12,6 @@ public interface shoppingCartService {
     void addCart(ShoppingCartDTO shoppingCartDTO);
 
     void deleteCart();
+
+    void sub(ShoppingCartDTO shoppingCartDTO);
 }

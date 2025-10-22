@@ -16,6 +16,8 @@ public interface OrderService {
 
     PageResult pageQuery(OrdersPageQueryDTO ordersPageQueryDTO);
 
+    PageResult UserPageQuery(OrdersPageQueryDTO ordersPageQueryDTO);
+
     void cancel(OrdersCancelDTO ordersCancelDTO);
 
     void complete(Long id);
@@ -24,13 +26,17 @@ public interface OrderService {
 
     void confirm(OrdersConfirmDTO ordersConfirmDTO);
 
-    Orders details(Long id);
+    OrderVO details(Long id);
 
     void delivery(Long id);
 
     OrderStatisticsVO statistics();
 
+    void PaySuccess(OrdersPaymentDTO ordersPaymentDTO);
 
+    void reminder(Long id);
 
+    void UserCancel(Long id);
 
+    void repetition(Long id);
 }

@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.entity.OrderDetail;
 import com.sky.entity.Orders;
+import com.sky.vo.OrderVO;
 import org.apache.ibatis.annotations.*;
 import org.springframework.core.annotation.Order;
 
@@ -27,25 +28,18 @@ public interface OrderMapper {
 
     int update(Orders orders);
 
+    @Update("update orders set pay_status = #{payStatus},status=#{status} where number = #{number}")
+    int PaySuccess(Orders  orders);
+
     //订单分页查询
     Page<Orders> pageQuery(OrdersPageQueryDTO ordersPageQueryDTO);
 
-    @Update("update orders set status = #{status} where id = #{id}")
-    int cancel(Orders orders);
-
-    @Update("update orders set status = #{status} where id = #{id}")
-    int complete(Orders  orders);
-
-    @Update("update orders set status = #{status} where id = #{id}")
+    @Update("update orders set rejection_reason=#{rejectionReason} where id = #{id}")
     int reject(Orders orders);
 
-    @Update("update orders set status = #{status} where id = #{id}")
-    int confirm(Orders orders);
-
+    //根据订单id查询对应订单
     @Select("select * from orders where id = #{id}")
     Orders getById(Long id);
 
-    @Update("update orders set status = #{status} where id = #{id}")
-    int delivery(Orders orders);
 
 }
