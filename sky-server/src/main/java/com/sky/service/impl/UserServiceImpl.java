@@ -1,6 +1,7 @@
 package com.sky.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.util.StringUtil;
 import com.sky.constant.MessageConstant;
 import com.sky.dto.UserLoginDTO;
 import com.sky.entity.User;
@@ -10,13 +11,19 @@ import com.sky.properties.WeChatProperties;
 import com.sky.service.UserService;
 import com.sky.utils.HttpClientUtil;
 import com.sky.vo.UserLoginVO;
+import com.sky.vo.UserReportVO;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -28,6 +35,41 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
     @Autowired
     private WeChatProperties weChatProperties;
+
+    /**
+     * 统计用户数据
+     * @param begin
+     * @param end
+     * @return
+     */
+    @Override
+    public UserReportVO UserStatistics(LocalDate begin, LocalDate end) {
+        List<LocalDate> dateList=new ArrayList<>();
+        while(!begin.isAfter(end)){
+            dateList.add(begin);
+            begin=begin.plusDays(1);
+        }
+
+        List<Integer> newUserList=new ArrayList<>();
+        List<Integer> totalUserList=new ArrayList<>();
+        dateList.forEach(date->{
+            LocalDateTime beginTime=LocalDateTime.of(date, LocalTime.MIN);
+            LocalDateTime endTime=LocalDateTime.of(date, LocalTime.MAX);
+            Map<String,Object> map=new HashMap<>();
+            map.put("beginTime",beginTime);
+            map.put("endTime",endTime);
+            int size = userMapper.UserStatistics(map);
+            newUserList.add(size);
+
+            map.remove("beginTime");
+            int totalCount = userMapper.UserStatistics(map);
+            totalUserList.add(totalCount);
+        });
+
+        return new UserReportVO(StringUtils.join(dateList, ","),
+                 StringUtils.join(totalUserList, ","),
+                 StringUtils.join(newUserList, ","));
+    }
 
     @Override
     public User wxlogin(UserLoginDTO userLoginDTO) {

@@ -1,6 +1,7 @@
 package com.sky.mapper;
 
 import com.github.pagehelper.Page;
+import com.sky.dto.GoodsSalesDTO;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.entity.OrderDetail;
 import com.sky.entity.Orders;
@@ -10,6 +11,7 @@ import org.springframework.core.annotation.Order;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface OrderMapper {
@@ -22,18 +24,25 @@ public interface OrderMapper {
     @Select("select * from orders where status = #{status} and order_time < #{time}")
     List<Orders> findOrdersByStatusAndOrderTime(Integer status, LocalDateTime time);
 
+    //根据状态查村订单
+    @Select("select * from orders where status = #{status}")
+    List<Orders> listByStatus(Integer status);
 
+    //查询所有订单
     @Select("select * from orders")
     List<Orders> statistics();
 
+    //修改订单
     int update(Orders orders);
 
+    //订单支付成功更新状态
     @Update("update orders set pay_status = #{payStatus},status=#{status} where number = #{number}")
     int PaySuccess(Orders  orders);
 
     //订单分页查询
     Page<Orders> pageQuery(OrdersPageQueryDTO ordersPageQueryDTO);
 
+    //订单取消
     @Update("update orders set rejection_reason=#{rejectionReason} where id = #{id}")
     int reject(Orders orders);
 
@@ -41,5 +50,13 @@ public interface OrderMapper {
     @Select("select * from orders where id = #{id}")
     Orders getById(Long id);
 
+    //订单营业额统计
+    Double orderStatistics(Map<String, Object> map);
+
+    //订单数量统计
+    Integer orderCount(Map<String, Object> map);
+
+    //订单销量top10排名
+    List<GoodsSalesDTO> top10(Map<String, Object> map);
 
 }

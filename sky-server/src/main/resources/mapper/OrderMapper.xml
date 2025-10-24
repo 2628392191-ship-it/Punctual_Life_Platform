@@ -93,4 +93,53 @@
       </if>
       </where>
     </select>
+
+    <select id="orderStatistics" resultType="double">
+        select sum(amount) from orders
+        <where>
+            <if test="beginTime!=null">
+                and order_time>= #{beginTime}
+            </if>
+        <if test="endTime!=null">
+            <![CDATA[and order_time<= #{endTime}]]>
+        </if>
+        <if test="status!=null">
+            and status = #{status}
+        </if>
+        </where>
+    </select>
+    <select id="orderCount" resultType="Integer">
+            select count(id) from orders
+            <where>
+                <if test="beginTime!=null">
+                    and order_time>= #{beginTime}
+                </if>
+            <if test="endTime!=null">
+                <![CDATA[
+                   and order_time<= #{endTime}
+                ]]>
+            </if>
+            <if test="status!=null">
+                and status = #{status}
+            </if>
+            </where>
+    </select>
+
+    <select id="top10" resultType="com.sky.dto.GoodsSalesDTO">
+            select name,sum(order_detail.number) as number
+            from order_detail,orders
+            where order_detail.order_id = orders.id
+            <if test="beginTime!=null">
+                and orders.order_time &gt;= #{beginTime}
+            </if>
+            <if test="endTime!=null">
+                and orders.order_time &lt;= #{endTime}
+            </if>
+            <if test="status!=null">
+                and orders.status = #{status}
+            </if>
+            group by name
+            order by number desc
+            limit 10;
+    </select>
 </mapper>

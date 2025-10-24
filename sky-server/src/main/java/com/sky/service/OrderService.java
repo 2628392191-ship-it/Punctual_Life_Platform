@@ -4,10 +4,9 @@ import com.sky.dto.*;
 import com.sky.entity.OrderDetail;
 import com.sky.entity.Orders;
 import com.sky.result.PageResult;
-import com.sky.vo.OrderStatisticsVO;
-import com.sky.vo.OrderSubmitVO;
-import com.sky.vo.OrderVO;
+import com.sky.vo.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface OrderService {
@@ -39,4 +38,10 @@ public interface OrderService {
     void UserCancel(Long id);
 
     void repetition(Long id);
+
+    TurnoverReportVO turnoverStatistics(LocalDate begin, LocalDate end);
+
+    OrderReportVO ordersStatistics(LocalDate begin, LocalDate end);
+
+    SalesTop10ReportVO top10(LocalDate begin, LocalDate end);
 }

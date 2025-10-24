@@ -38,5 +38,7 @@ public interface SetmealMapper {
 
     Page<Setmeal> pageQuery(SetmealPageQueryDTO setmealPageQueryDTO);
 
+    @Select("select * from setmeal where status = #{status}")
+    List<Setmeal> listByStatus(Integer status);
 
 }
