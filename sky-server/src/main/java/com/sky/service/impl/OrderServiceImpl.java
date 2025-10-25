@@ -432,6 +432,8 @@ public class OrderServiceImpl implements OrderService {
         build.setAddress(addressBook.getDetail());
         build.setUserName(user.getName());
         build.setConsignee(addressBook.getConsignee());
+        //移除当前线程的用户id
+        BaseContext.removeCurrentId();
     }
 
 

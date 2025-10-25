@@ -54,13 +54,14 @@ public class DishServiceImpl implements DishService {
         List<DishFlavor> list=dishDTO.getFlavors();
 
         //只有有口味才添加
-        if(list!=null && list.size()>0){
+        if(list!=null && !list.isEmpty()){
         //遍历集合，给每一个数据设置它们的菜品id，这样就知道这个口味数据是哪一道菜的数据
             list.forEach(dishFlavor -> {
                 dishFlavor.setDishId(id);
             });
+            dishFlavorMapper.insertBatch(list);
         }
-       dishFlavorMapper.insertBatch(list);
+
     }
 
     /**

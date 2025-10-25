@@ -35,6 +35,7 @@ public class AddressBookServiceImpl implements AddressBookService {
         addressBook.setUserId(BaseContext.getCurrentId());
         addressBook.setIsDefault(0);
         addressBookMapper.insert(addressBook);
+        BaseContext.removeCurrentId();
     }
 
     /**
@@ -72,6 +73,7 @@ public class AddressBookServiceImpl implements AddressBookService {
         //2、将当前地址改为默认地址 update address_book set is_default = ? where id = ?
         addressBook.setIsDefault(1);
         addressBookMapper.update(addressBook);
+        BaseContext.removeCurrentId();
     }
 
     /**

@@ -5,6 +5,7 @@ import com.sky.constant.JwtClaimsConstant;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
+import com.sky.dto.PasswordEditDTO;
 import com.sky.entity.Employee;
 import com.sky.properties.JwtProperties;
 import com.sky.result.PageResult;
@@ -53,8 +54,11 @@ public class EmployeeController {
         Map<String, Object> claims = new HashMap<>();
         claims.put(JwtClaimsConstant.EMP_ID, employee.getId());
         String token = JwtUtil.createJWT(
+                //拿到管理端的秘钥
                 jwtProperties.getAdminSecretKey(),
+                //令牌的过期时间
                 jwtProperties.getAdminTtl(),
+                //设置声明部分
                 claims);
 
         EmployeeLoginVO employeeLoginVO = EmployeeLoginVO.builder()
@@ -137,6 +141,12 @@ public class EmployeeController {
         return  Result.success();
     }
 
-
+    @ApiOperation("修改密码")
+    @PutMapping("/editPassword")
+    public Result updatePassword(@RequestBody PasswordEditDTO passwordEditDTO){
+        log.info("修改密码：{}",passwordEditDTO);
+        employeeService.updatePassword(passwordEditDTO);
+        return  Result.success();
+    }
 
 }

@@ -103,6 +103,7 @@ public class shoppingCartServiceImpl implements shoppingCartService {
         ShoppingCart shoppingCart = ShoppingCart.builder()
                 .userId(BaseContext.getCurrentId())
                 .build();
+        BaseContext.removeCurrentId();
         return shoppingcartmapper.list(shoppingCart);
     }
 

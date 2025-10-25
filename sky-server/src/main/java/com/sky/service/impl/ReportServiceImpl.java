@@ -35,6 +35,7 @@ public class ReportServiceImpl implements ReportService  {
          try {
            //处理近30天的数据
            //这里使用当前的时间是因为此后是不知道是否有订单的
+           //withNano(0)将秒以后的单位表示的精度设置为0
            LocalDateTime end = LocalDateTime.now().withNano(0);
            //开始的时间设置为00:00:00d的目的是让这之前的数据也能被查询到
            LocalDateTime begin = LocalDateTime.of(end.minusDays(30).toLocalDate(), LocalTime.MIN);

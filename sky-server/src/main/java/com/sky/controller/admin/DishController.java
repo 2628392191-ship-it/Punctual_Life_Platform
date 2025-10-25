@@ -29,7 +29,10 @@ public class DishController {
     @Autowired
     private DishService dishService;
 
-
+    /**
+     * 清理缓存中菜品数据
+     * @param key
+     */
     private void CleanCache(String key){
         log.info("清理缓存：{}", key);
         Set keys = redisTemplate.keys(key);
