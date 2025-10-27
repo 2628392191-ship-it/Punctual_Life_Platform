@@ -9,7 +9,7 @@ sky:
   wechat:
     appid: wx2714016ddce042d8
     secret: 5396a481383385dee3168448f6eed661
-    notify-url: http://27b14551.r6.cpolar.cn/user/order/payment
+#    notify-url: http://27b14551.r6.cpolar.cn/user/order/payment
     
 
 

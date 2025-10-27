@@ -98,13 +98,14 @@ public class UserServiceImpl implements UserService {
             String json = HttpClientUtil.doGet(url,map);
             // 添加日志记录
             log.info("微信接口返回: {}", json);
-
+            //将字符串变为json数据
             JSONObject jsonObject = JSONObject.parseObject(json);
             // 检查是否有错误码
             if(jsonObject.containsKey("errcode")) {
                 log.error("微信接口错误: {}", jsonObject.getString("errmsg"));
                 return null;
             }
+            //返回json数据中的openid
             return jsonObject.getString("openid");
         } catch (Exception e) {
             log.error("调用微信接口异常", e);

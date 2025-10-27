@@ -88,11 +88,13 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     }
     @Bean
     public Docket docket2() {
+        //文档的“封面信息”
         ApiInfo apiInfo2 = new ApiInfoBuilder()
                 .title("苍穹外卖项目接口文档")
                 .version("2.0")
                 .description("苍穹外卖项目接口文档")
                 .build();
+        //文档的”容器“或“总控制器”
         Docket docket2 = new Docket(DocumentationType.SWAGGER_2)
                 .groupName("用户端")
                 .apiInfo(apiInfo2)
