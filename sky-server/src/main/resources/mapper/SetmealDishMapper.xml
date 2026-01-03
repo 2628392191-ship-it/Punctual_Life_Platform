@@ -20,4 +20,16 @@
             (#{item.setmealId},#{item.dishId},#{item.copies},#{item.name},#{item.price})
         </foreach>
     </insert>
+    <update id="updateDetail">
+        update setmeal_dish
+        <set>
+            <if test="price != null">
+                price=#{price},
+            </if>
+            <if test="copies != null">
+                copies=#{copies},
+            </if>
+        </set>
+        where dish_id=#{dishId}
+    </update>
 </mapper>

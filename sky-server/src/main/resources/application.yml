@@ -54,7 +54,7 @@ sky:
 
 # 配置阿里云OSS
 ali:
-   oss:
+  oss:
     endpoint: https://oss-cn-hangzhou.aliyuncs.com
     key: LTAI5tPd4T8YTnB7YYxmSYSS
     secret: 5HqFFeRo77GTHg4BRD81eKceD2KMwZ

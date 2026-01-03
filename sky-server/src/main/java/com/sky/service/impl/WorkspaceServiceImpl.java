@@ -60,15 +60,15 @@ public class WorkspaceServiceImpl implements WorkspaceService {
                       .build();
        }
 
-       //TODO::需要将订单修改为当天订单信息，目前为所有的订单状态信息
+       //需要将订单修改为当天订单信息，目前为所有的订单状态信息
        @Override
        public OrderOverViewVO overviewOrders(){
              return OrderOverViewVO.builder()
                      .allOrders(orderMapper.statistics().size())
-                     .cancelledOrders(orderMapper.listByStatus(Orders.CANCELLED).size())
-                     .completedOrders(orderMapper.listByStatus(Orders.COMPLETED).size())
-                     .deliveredOrders(orderMapper.listByStatus(Orders.DELIVERY_IN_PROGRESS).size())
-                     .waitingOrders(orderMapper.listByStatus(Orders.TO_BE_CONFIRMED).size())
+                     .cancelledOrders(orderMapper.listByStatusAndDate(Orders.CANCELLED, LocalDateTime.now()).size())
+                     .completedOrders(orderMapper.listByStatusAndDate(Orders.COMPLETED, LocalDateTime.now()).size())
+                     .deliveredOrders(orderMapper.listByStatusAndDate(Orders.DELIVERY_IN_PROGRESS, LocalDateTime.now()).size())
+                     .waitingOrders(orderMapper.listByStatusAndDate(Orders.TO_BE_CONFIRMED, LocalDateTime.now()).size())
                      .build();
        }
 

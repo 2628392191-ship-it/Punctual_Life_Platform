@@ -22,7 +22,7 @@
         <update id="updateDish">
             update dish
             <set>
-                <if test="name !=null">
+                <if test="name !=null and name!=''">
                     name=#{name},
                 </if>
                 <if test="categoryId !=null">
@@ -34,10 +34,10 @@
                 <if test="status !=null">
                     status= #{status},
                 </if>
-                <if test="image!=null">
+                <if test="image!=null and image!=''">
                     image= #{image},
                 </if>
-                <if test="description">
+                <if test="description!=null and description!=''">
                     description= #{description},
                 </if>
                 update_time= #{updateTime},

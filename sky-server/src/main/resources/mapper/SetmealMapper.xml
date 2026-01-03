@@ -32,4 +32,29 @@
             </if>
         </where>
     </select>
+
+    <update id="update">
+         update setmeal
+        <set>
+          <if test="name != null">
+             name = #{name},
+        </if>
+            <if test="categoryId != null">
+                category_id = #{categoryId},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+             <if test="status != null">
+                 status = #{status},
+             </if>
+            <if test="description != null and description!=''">
+                description = #{description},
+            </if>
+            <if test="image != null and image!=''">
+                image = #{image},
+            </if>
+            update_time= #{updateTime},
+        </set> where id=#{id}
+    </update>
 </mapper>

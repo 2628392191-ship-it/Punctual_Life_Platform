@@ -64,9 +64,9 @@ public class OrderServiceImpl implements OrderService {
         fillOrder(build,addressBook,user);
         int addorder = orderMapper.insert(build);
 
-        //TODO::对订单详细的填充
+        //对订单详细的填充
         //详细需要从购物车来拿
-        //TODO::从购物车中获取数据
+        //从购物车中获取数据
         List<ShoppingCart> carts =shoppingCartService.list();
        List<OrderDetail> orderDetails =carts.stream().map(cart->{
               OrderDetail detail=OrderDetail.builder().build();
@@ -105,7 +105,7 @@ public class OrderServiceImpl implements OrderService {
      * 用户端订单分页查询
      * @param ordersPageQueryDTO
      * @return
-     * TODO::将OrderVO属性填充（并不需要单独设置一个mapper来处理这样做反而复杂化，而且也不需要）
+     * 将OrderVO属性填充（并不需要单独设置一个mapper来处理这样做反而复杂化，而且也不需要）
      * Done!!
      */
     @Override
@@ -113,6 +113,7 @@ public class OrderServiceImpl implements OrderService {
         PageHelper.startPage(ordersPageQueryDTO.getPage(), ordersPageQueryDTO.getPageSize());
         Page<Orders> pa=orderMapper.pageQuery(ordersPageQueryDTO);
         List<OrderVO> orderVOS=new ArrayList<>();
+        //对要查询的这一页的数据进行填充并以VO对象返回
         if(pa!=null&&!pa.isEmpty()) {
             orderVOS=pa.stream().map(order -> {
                 List<OrderDetail> byOrderId = orderDetailMapper.getByOrderId(order.getId());
@@ -122,6 +123,7 @@ public class OrderServiceImpl implements OrderService {
                 return orderVO;
             }).collect(Collectors.toList());
         }
+        //返回的是分页集合
         return new PageResult(pa.getTotal(), orderVOS);
     }
 
@@ -129,6 +131,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 管理端订单取消
      * @param ordersCancelDTO
+     * 订单取消应该是超时未支付，商家只能够拒绝订单
      */
     @Override
     public void cancel(OrdersCancelDTO ordersCancelDTO){
@@ -409,18 +412,18 @@ public class OrderServiceImpl implements OrderService {
          * 设置user_id：用户id，Done!
          * 设置id：address_book_id，页面有提供不用设置
          * 设置order_time：下单时间，Done!
-         * TODO::设置checkout_time：付款时间，目前无法设置，等后续更新设置
-         * TODO::设置pay_method：支付方式，下单才知道，后续更新设置
+         * 设置checkout_time：付款时间，目前无法设置，等后续更新设置
+         * 设置pay_method：支付方式，下单才知道，后续更新设置
          * 设置pay_status：支付状态，目前为未支付，Done!
          * 设置amount：订单金额，页面提供
          * 设置remark：备注，前端提供
-         * TODO:: Done!!!
+         *  Done!!!
          *  1.收货人电话，需要设置   phone
          *  2.收货人地址，需要设置   address
          *  3.下单的这个用户的昵称   user_name
          *  4.收货人姓名         consignee
-         * TODO::设置cancel_reason：取消原因，目前为空，后续更新设置
-         * TODO::rejection_reason：拒绝原因，目前为空，后续更新设置
+         * 设置cancel_reason：取消原因，目前为空，后续更新设置
+         * rejection_reason：拒绝原因，目前为空，后续更新设置
          * estimateDeliveryTime：预计送达时间，页面提供，不用设置
          * delivery_status：配送状态，页面提供，不用设置
          * pack_amount：打包费，页面提供，不用设置

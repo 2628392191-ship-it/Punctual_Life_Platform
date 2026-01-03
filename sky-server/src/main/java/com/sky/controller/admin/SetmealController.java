@@ -46,8 +46,7 @@ public class SetmealController {
     @PutMapping
     public Result update(@RequestBody SetmealDTO setmealDTO) {
         log.info("修改套餐：{}", setmealDTO);
-        //TODO:setmealService.updateSetmeal(setmealDTO);
-        return Result.success();
+        return setmealService.updateSetmeal(setmealDTO);
     }
 
     @ApiOperation("分页查询套餐")
@@ -66,4 +65,18 @@ public class SetmealController {
         return Result.success(setmealVO);
     }
 
+    @CacheEvict(cacheNames = "setmeal", key="#id")
+    @ApiOperation("批量删除套餐")
+    @DeleteMapping
+    public Result delete(@RequestParam Long id) {
+        log.info("批量删除：{}", id);
+        return Result.success();
+    }
+
+    @ApiOperation("起售、停售套餐")
+    @PostMapping("/status/{status}")
+    public Result startOrStop(@PathVariable Integer status,@RequestParam Long id) {
+         log.info("起售、停售套餐：{}", id);
+         return setmealService.startOrStop(status, id);
+    }
 }

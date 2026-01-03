@@ -10,13 +10,10 @@ sky:
     appid: wx2714016ddce042d8
     secret: 5396a481383385dee3168448f6eed661
 #    notify-url: http://27b14551.r6.cpolar.cn/user/order/payment
-    
-
-
 
 spring:
   redis:
     host: 192.168.233.145
-    port: 6379
+    port: 6380
 #    password: 123456
-    database: 0
+    database: 2

@@ -26,7 +26,7 @@ public class CommonController {
     private AliOSSUtils aliOSSUtils;
 
 
-    //TODO::图片能上传但无法显示
+    //图片能上传但无法显示
     @ApiOperation("文件上传")
     @PostMapping("/upload")
     public Result upload(MultipartFile file) throws IOException {

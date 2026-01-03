@@ -4,6 +4,7 @@ import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
 import com.sky.result.PageResult;
+import com.sky.result.Result;
 import com.sky.vo.DishItemVO;
 import com.sky.vo.SetmealVO;
 
@@ -21,4 +22,7 @@ public interface SetmealService {
 
     SetmealVO getById(Long id);
 
+    Result updateSetmeal(SetmealDTO setmealDTO);
+
+    Result startOrStop(Integer status, Long id);
 }

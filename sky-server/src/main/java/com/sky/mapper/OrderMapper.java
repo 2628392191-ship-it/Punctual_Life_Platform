@@ -8,6 +8,7 @@ import com.sky.entity.Orders;
 import com.sky.vo.OrderVO;
 import org.apache.ibatis.annotations.*;
 import org.springframework.core.annotation.Order;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,9 +25,13 @@ public interface OrderMapper {
     @Select("select * from orders where status = #{status} and order_time < #{time}")
     List<Orders> findOrdersByStatusAndOrderTime(Integer status, LocalDateTime time);
 
-    //根据状态查村订单
+    //根据状态和时间查询订单
     @Select("select * from orders where status = #{status}")
-    List<Orders> listByStatus(Integer status);
+    List<Orders> listByStatus( Integer status);
+
+    //根据状态和日期查询订单（查询指定日期的订单）
+    @Select("select * from orders where status = #{status} and DATE(order_time) = DATE(#{orderDate})")
+    List<Orders> listByStatusAndDate(@Param("status") Integer status, @Param("orderDate") LocalDateTime orderDate);
 
     //查询所有订单
     @Select("select * from orders")
@@ -43,7 +48,7 @@ public interface OrderMapper {
     Page<Orders> pageQuery(OrdersPageQueryDTO ordersPageQueryDTO);
 
     //订单取消
-    @Update("update orders set rejection_reason=#{rejectionReason} where id = #{id}")
+    @Update("update orders set rejection_reason=#{rejectionReason},status=#{status} where id = #{id}")
     int reject(Orders orders);
 
     //根据订单id查询对应订单

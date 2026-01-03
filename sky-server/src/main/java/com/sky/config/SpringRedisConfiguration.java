@@ -19,7 +19,7 @@ public class SpringRedisConfiguration {
     @Bean
     public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
         //创建Redis模板对象
-        //TODO：分析spring默认的转换器JdkSerializationRedisSerializer
+        //分析spring默认的转换器JdkSerializationRedisSerializer
         RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<>();
 
         //解决乱码问题和字符串序列化问题

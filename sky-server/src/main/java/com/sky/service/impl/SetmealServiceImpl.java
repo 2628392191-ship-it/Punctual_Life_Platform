@@ -10,6 +10,7 @@ import com.sky.entity.SetmealDish;
 import com.sky.mapper.SetmealDishMapper;
 import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
+import com.sky.result.Result;
 import com.sky.service.SetmealService;
 import com.sky.vo.DishItemVO;
 import com.sky.vo.DishVO;
@@ -42,7 +43,7 @@ public class SetmealServiceImpl implements SetmealService {
 
 
 
-    //TODO:需要增加逻辑，套餐的价格应该等于每道菜品及份数乘积的价格之和
+    //需要增加逻辑，套餐的价格应该等于每道菜品及份数乘积的价格之和
     @Transactional
     @Override
     public void addSetmeal(SetmealDTO setmealDTO) {
@@ -67,6 +68,32 @@ public class SetmealServiceImpl implements SetmealService {
         List<SetmealDish> setmealDishBySetmealId = setmealDishMapper.findSetmealDishBySetmealId(id);
         setmealVO.setSetmealDishes(setmealDishBySetmealId);
         return setmealVO;
+    }
+
+    @Transactional
+    @Override
+    public Result updateSetmeal(SetmealDTO setmealDTO) {
+        //更新套餐
+        Setmeal setmeal = Setmeal.builder().build();
+        BeanUtils.copyProperties(setmealDTO, setmeal);
+        setmealMapper.update(setmeal);
+        //更新关联的菜品集合
+        List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
+        if(setmealDishes!=null&&!setmealDishes.isEmpty()){
+            for (SetmealDish setmealDish : setmealDishes) {
+                setmealDishMapper.updateDetail(setmealDish);
+            }
+            setmealDTO.setSetmealDishes(setmealDishMapper.findSetmealDishBySetmealId(setmealDTO.getId()));
+        }
+        return Result.success(setmealDTO);
+    }
+
+    @Override
+    public Result startOrStop(Integer status, Long id) {
+        Setmeal setmeal = setmealMapper.getById(id);
+        setmeal.setStatus(status);
+        setmealMapper.update(setmeal);
+        return Result.success();
     }
 
 

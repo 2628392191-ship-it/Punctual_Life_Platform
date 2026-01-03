@@ -95,14 +95,14 @@ public class DishServiceImpl implements DishService {
     @Override
     public void deleteDish(List<Long> ids) {
         //1.先看是否有起售的菜品，若有则无法删除
-        //TODO: 判断是否有起售的菜品
+        // 判断是否有起售的菜品
         ids.forEach(id -> {
             Dish dishByIdAndStatus = dishMapper.findDishById(id);
             if(dishByIdAndStatus!=null&&dishByIdAndStatus.getStatus().equals(StatusConstant.ENABLE))
                 throw new DeletionNotAllowedException(MessageConstant.DISH_ON_SALE);
         });
         //2.再看是否有套餐关联的菜品，若有则无法删除
-        //TODO: 判断是否有套餐关联的菜品
+        //判断是否有套餐关联的菜品
         List<Long> mealDish = setmealDishMapper.getSetmealDishByDishId(ids);
         if(mealDish!=null && !mealDish.isEmpty()) {
             throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
