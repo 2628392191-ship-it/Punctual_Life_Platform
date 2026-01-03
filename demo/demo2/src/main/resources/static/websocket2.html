@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<input id="text" type="text"/>
+<button onclick="send()">发送消息</button>
+<button onclick="closeWebSocket()">关闭连接</button>
+<div id="message"></div>
+</body>
+<script type="text/javascript">
+  var webSocket;
+  //定义webSocket对象，并创建连接
+  if("webSocket" in window){
+      console.log("您的浏览器支持webSocket");
+
+      webSocket = new WebSocket("ws://localhost:8080/webSocketServer2");
+  }else{
+      console.log("您的浏览器不支持webSocket");
+  }
+ //定义发送消息的方法
+  function send(){
+     webSocket.send(document.getElementById("text").value)
+  }
+
+  //定义接收消息的方法
+  webSocket.onmessage=function(msg){
+      //document.getElementById("message").append(msg.data);
+      //这里做了字符串（后端传过来的）的拼接换行
+      document.getElementById("message").innerHTML+=msg.data+"<br/>";
+  }
+
+  //定义关闭连接的方法
+  function closeWebSocket(){
+      webSocket.close();
+  }
+
+  //定义监听关闭连接
+  window.onbeforeunload=function (){
+      webSocket.close();
+  }
+
+</script>
+
+</html>
