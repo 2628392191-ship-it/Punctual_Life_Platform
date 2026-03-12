@@ -1,20 +1,21 @@
 package com.sky.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.util.StringUtil;
+import com.sky.constant.JwtClaimsConstant;
 import com.sky.constant.MessageConstant;
 import com.sky.dto.UserLoginDTO;
 import com.sky.entity.User;
 import com.sky.exception.LoginFailedException;
 import com.sky.mapper.UserMapper;
+import com.sky.properties.JwtProperties;
 import com.sky.properties.WeChatProperties;
-import com.sky.service.UserService;
+import com.sky.setmeal.service.UserService;
 import com.sky.utils.HttpClientUtil;
+import com.sky.utils.JwtUtil;
 import com.sky.vo.UserLoginVO;
 import com.sky.vo.UserReportVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,8 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
     @Autowired
     private WeChatProperties weChatProperties;
+    @Autowired
+    private JwtProperties jwtProperties;
 
     /**
      * 统计用户数据
@@ -72,11 +75,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User wxlogin(UserLoginDTO userLoginDTO) {
+    public UserLoginVO wxlogin(UserLoginDTO userLoginDTO) {
         String Openid = getOpenid(userLoginDTO.getCode());
         if(Openid==null) throw new LoginFailedException(MessageConstant.LOGIN_FAILED);
 
+        //根据Openid查询用户
         User byOpenid = userMapper.getByOpenid(Openid);
+        //若用户为空则创建用户
         if(byOpenid==null){
              byOpenid=User.builder()
                      .openid(Openid)
@@ -84,7 +89,22 @@ public class UserServiceImpl implements UserService {
                      .build();
              userMapper.insertUser(byOpenid);
         }
-        return byOpenid;
+
+        //设置token令牌
+        Map<String,Object> claims = new HashMap<>();
+        claims.put(JwtClaimsConstant.USER_ID,byOpenid.getId());
+        String token= JwtUtil.createJWT(
+                jwtProperties.getUserSecretKey(),
+                jwtProperties.getUserTtl(),
+                claims
+        );
+
+        UserLoginVO userLoginVO=UserLoginVO.builder()
+                .openid(byOpenid.getOpenid())
+                .token(token)
+                .id(byOpenid.getId())
+                .build();
+        return userLoginVO;
     }
 
     private String getOpenid(String code){

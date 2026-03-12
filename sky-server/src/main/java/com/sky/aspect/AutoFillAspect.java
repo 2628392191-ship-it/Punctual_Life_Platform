@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @Component
 @Slf4j
 public class AutoFillAspect {
-    @Pointcut("execution(* com.sky.mapper.*.*(..))")
+    @Pointcut("execution(* com.sky.setmeal.mapper.*.*(..))")
     public void autoFillPointcut() {}
 
     @Before("autoFillPointcut()")

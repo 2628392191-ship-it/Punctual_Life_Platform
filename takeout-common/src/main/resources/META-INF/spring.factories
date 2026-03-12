@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.sky.gateway.utils.common.config.WebMvcConfiguration

@@ -1,0 +1,13 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: category-service # 服务名称
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  main:
+    allow-circular-references: true
+
+
+

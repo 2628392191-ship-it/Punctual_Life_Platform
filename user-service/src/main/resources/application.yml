@@ -1,0 +1,13 @@
+server:
+  port: 8085
+
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  main:
+    allow-circular-references: true
+sky:
+ wechat:
+      appid: ${sky.wechat.appid}
+      secret: ${sky.wechat.secret}

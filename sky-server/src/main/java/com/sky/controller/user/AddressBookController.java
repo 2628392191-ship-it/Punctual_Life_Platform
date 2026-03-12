@@ -3,7 +3,7 @@ package com.sky.controller.user;
 import com.sky.context.BaseContext;
 import com.sky.entity.AddressBook;
 import com.sky.result.Result;
-import com.sky.service.AddressBookService;
+import com.sky.setmeal.service.AddressBookService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

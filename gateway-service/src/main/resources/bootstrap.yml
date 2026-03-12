@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    nacos:
+      server-addr: 192.168.233.145:8848
+      username: nacos
+      password: nacos
+      config:
+        file-extension: yaml
+        shared-configs:
+          - dataId: shared-logback.yaml # 共享日志配置
+
+

@@ -1,7 +1,6 @@
 package com.sky.controller.admin;
 
 import com.sky.constant.MessageConstant;
-import com.sky.constant.StatusConstant;
 import com.sky.result.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

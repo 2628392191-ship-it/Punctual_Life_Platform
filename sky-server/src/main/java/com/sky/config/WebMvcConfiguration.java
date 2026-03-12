@@ -81,7 +81,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .groupName("管理员端")
                 .apiInfo(apiInfo1)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.sky.controller.admin"))
+                .apis(RequestHandlerSelectors.basePackage("com.sky.setmeal.controller.admin"))
                 .paths(PathSelectors.any())
                 .build();
         return docket1;
@@ -99,7 +99,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .groupName("用户端")
                 .apiInfo(apiInfo2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.sky.controller.user"))
+                .apis(RequestHandlerSelectors.basePackage("com.sky.setmeal.controller.user"))
                 .paths(PathSelectors.any())
                 .build();
         return docket2;

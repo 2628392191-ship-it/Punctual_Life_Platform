@@ -1,0 +1,28 @@
+server:
+  port: 8080 # 端口
+sky:
+  jwt:
+    # 设置jwt签名加密时使用的秘钥
+    admin-secret-key: itcast
+    # 设置jwt过期时间
+    admin-ttl: 7200000
+    # 设置前端传递过来的令牌名称
+    admin-token-name: adminToken
+
+    user-secret-key: itheima
+    user-ttl: 7200000
+    user-token-name: userToken
+
+  auth:
+    excludePaths:
+      - /admin/employee/login
+      - /admin/employee/logout
+      - /user/user/login
+
+# 配置阿里云OSS
+#ali:
+#  oss:
+#    endpoint: https://oss-cn-hangzhou.aliyuncs.com
+#    access-key-id: LTAI5tPd4T8YTnB7YYxmSYSS
+#    access-key-secret: 5HqFFeRo77GTHg4BRD81eKceD2KMwZ
+#    bucket-name: xxzxed
