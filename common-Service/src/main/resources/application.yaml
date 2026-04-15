@@ -1,0 +1,10 @@
+server:
+  port: 8088
+
+spring:
+  application:
+    name: common-service
+  mvc:
+    pathmatch:
+#      springboot版本与knife4j下的mvc版本不兼容，需要添加以下配置
+      matching-strategy: ant_path_matcher
