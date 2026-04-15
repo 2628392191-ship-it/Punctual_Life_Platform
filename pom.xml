@@ -13,9 +13,7 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>sky-common</module>
         <module>sky-pojo</module>
-        <module>sky-server</module>
         <module>demo</module>
         <module>category-service</module>
         <module>dish-service</module>
@@ -28,6 +26,7 @@
         <module>gateway-service</module>
         <module>takeout-common</module>
         <module>takeout-api</module>
+        <module>common-service</module>
     </modules>
     <properties>
         <mybatis.spring>2.2.0</mybatis.spring>
