@@ -13,12 +13,12 @@ import java.util.List;
 @FeignClient("setmeal-service")
 public interface SetmealClient {
 
-    @GetMapping("/admin/setmeal/{setmealId}")
+    @GetMapping("/admin/setmeal/dish/{setmealId}")
     Result<List<DishItemVO>> getSetmealByDishIds(@PathVariable Long setmealId);
 
     @GetMapping("/admin/setmeal/{id}")
     Result<SetmealVO> getById(@PathVariable Long id);
 
-    @GetMapping("/admin/setmeal/{status}")
+    @GetMapping("/admin/setmeal/list/{status}")
     Result<List<Setmeal>> listByStatus(@PathVariable Integer status);
 }

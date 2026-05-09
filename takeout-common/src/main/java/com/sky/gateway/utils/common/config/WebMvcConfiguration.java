@@ -5,7 +5,6 @@ import com.sky.gateway.utils.common.interceptor.JwtTokenAdminInterceptor;
 import com.sky.gateway.utils.common.interceptor.JwtTokenUserInterceptor;
 import com.sky.gateway.utils.common.json.JacksonObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -21,7 +20,6 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -30,9 +28,15 @@ import java.util.List;
 @Slf4j
 @Configuration
 public class WebMvcConfiguration extends WebMvcConfigurationSupport {
-    JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
+    @Bean
+    JwtTokenAdminInterceptor jwtTokenAdminInterceptor() {
+        return new JwtTokenAdminInterceptor();
+    }
 
-    JwtTokenUserInterceptor jwtTokenUserInterceptor;
+    @Bean
+    JwtTokenUserInterceptor jwtTokenUserInterceptor() {
+        return new JwtTokenUserInterceptor();
+    }
     /**
      * 注册自定义拦截器
      *
@@ -40,8 +44,8 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
      */
     protected void addInterceptors(InterceptorRegistry registry) {
         log.info("开始注册自定义拦截器...");
-        registry.addInterceptor(jwtTokenAdminInterceptor);
-        registry.addInterceptor(jwtTokenUserInterceptor);
+        registry.addInterceptor(jwtTokenAdminInterceptor());
+        registry.addInterceptor(jwtTokenUserInterceptor());
     }
 
 

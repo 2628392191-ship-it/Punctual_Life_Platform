@@ -2,7 +2,7 @@ package com.sky.user.util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.sky.gateway.utils.common.util.WeChatProperties;
+import com.sky.user.util.WeChatProperties;
 import com.wechat.pay.contrib.apache.httpclient.WechatPayHttpClientBuilder;
 import com.wechat.pay.contrib.apache.httpclient.util.PemUtil;
 import org.apache.commons.lang.RandomStringUtils;

@@ -8,10 +8,7 @@ import com.sky.vo.UserReportVO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,10 +23,10 @@ public interface UserClient {
      @GetMapping("/user/addressBook/{id}")
      Result<AddressBook> getAddressBookById(@PathVariable Long id);
 
-     @GetMapping("/user/user/statistics")
+     @PostMapping("/user/user/statistics")
      Result<Integer> UserStatisticsTotal(@RequestBody Map<String, Object> map);
 
      @GetMapping("/user/user/userStatistics")
-     UserReportVO userStatistics(@SpringQueryMap @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
-                                 @SpringQueryMap @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate end);
+     Result<UserReportVO> userStatistics(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
+                                 @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate end);
 }

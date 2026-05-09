@@ -1,0 +1,46 @@
+<!--pages/payment/payment.wxml-->
+<view class="payment-page">
+  <!-- 头部 -->
+  <view class="pay-header">
+    <text class="pay-header-title">确认支付</text>
+  </view>
+
+  <!-- 金额展示 -->
+  <view class="amount-card">
+    <text class="amount-label">应付金额</text>
+    <view class="amount-row">
+      <text class="amount-unit">¥</text>
+      <text class="amount-value">{{amount}}</text>
+    </view>
+    <text class="amount-order-no">订单号：{{orderNumber}}</text>
+  </view>
+
+  <!-- 支付方式 -->
+  <view class="pay-methods card">
+    <text class="section-title">选择支付方式</text>
+    <view
+      class="pay-method-item {{selectedMethod === item.value ? 'active' : ''}}"
+      wx:for="{{methods}}"
+      wx:key="value"
+      bindtap="selectMethod"
+      data-value="{{item.value}}">
+      <text class="method-icon">{{item.icon}}</text>
+      <text class="method-name">{{item.name}}</text>
+      <view class="method-check {{selectedMethod === item.value ? 'checked' : ''}}">
+        <text wx:if="{{selectedMethod === item.value}}">✓</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 倒计时提示 -->
+  <view class="timeout-tip">
+    <text>请在 {{countdown}} 内完成支付，超时订单将自动取消</text>
+  </view>
+
+  <!-- 支付按钮 -->
+  <view class="pay-btn-area">
+    <button class="pay-btn" bindtap="doPay" loading="{{paying}}" disabled="{{paying}}">
+      {{paying ? '支付中...' : '立即支付 ¥' + amount}}
+    </button>
+  </view>
+</view>

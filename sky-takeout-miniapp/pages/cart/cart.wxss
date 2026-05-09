@@ -1,0 +1,177 @@
+/* pages/cart/cart.wxss */
+.cart-page {
+  min-height: 100vh;
+  background: #f5f5f5;
+  padding-bottom: 100px;
+}
+
+.cart-header {
+  background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+  padding: 44px 16px 16px;
+  color: #fff;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.cart-header-title {
+  font-size: 20px;
+  font-weight: 700;
+}
+.cart-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.cart-header-count {
+  font-size: 13px;
+  opacity: 0.8;
+}
+.cart-clear {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.cart-item {
+  display: flex;
+  background: #fff;
+  margin: 8px 12px;
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.cart-item-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  margin-right: 12px;
+  background: #f5f5f5;
+  flex-shrink: 0;
+}
+.cart-item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+.cart-item-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cart-item-flavor {
+  font-size: 11px;
+  color: #999;
+}
+.cart-item-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 价格 */
+.cart-price {
+  display: flex;
+  align-items: baseline;
+}
+.price-unit {
+  font-size: 12px;
+  font-weight: 700;
+  color: #ff4d4f;
+}
+.price-num {
+  font-size: 17px;
+  font-weight: 700;
+  color: #ff4d4f;
+}
+.price-total {
+  font-size: 22px;
+  font-weight: 700;
+  color: #ff4d4f;
+}
+
+/* 数量控制 */
+.qty-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.qty-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: #666;
+}
+.qty-plus {
+  background: #ff6b35;
+  color: #fff;
+}
+.qty-num {
+  font-size: 15px;
+  font-weight: 600;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* 底部栏 */
+.cart-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
+  z-index: 100;
+}
+.total-area {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.total-label {
+  font-size: 14px;
+  color: #666;
+}
+.checkout-btn {
+  padding: 12px 36px;
+  background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+  color: #fff;
+  border-radius: 24px;
+  font-size: 15px;
+  border: none;
+  font-weight: 600;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 100px 0;
+}
+.empty-icon {
+  font-size: 56px;
+  margin-bottom: 16px;
+}
+.empty-text {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 4px;
+}
+.empty-tip {
+  font-size: 13px;
+  color: #999;
+}

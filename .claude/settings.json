@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx vite *)",
+      "Bash(node -e \"const pkg = require\\('./node_modules/@element-plus/icons-vue/package.json'\\); console.log\\(pkg.version\\)\")",
+      "Bash(node -e \"const icons = require\\('./node_modules/@element-plus/icons-vue'\\); const names = Object.keys\\(icons\\).filter\\(k => k.startsWith\\('M'\\) || k.startsWith\\('T'\\)\\); console.log\\(names.join\\('\\\\n'\\)\\)\")",
+      "Bash(node -e \"const icons = require\\('./node_modules/@element-plus/icons-vue'\\); console.log\\('Magic:', !!icons.Magic\\); console.log\\('MagicStick:', !!icons.MagicStick\\); console.log\\('Right:', !!icons.Right\\); console.log\\('Trophy:', !!icons.Trophy\\); console.log\\('Money:', !!icons.Money\\); console.log\\('Tickets:', !!icons.Tickets\\); console.log\\('User:', !!icons.User\\); console.log\\('Magic exists as:', Object.keys\\(icons\\).filter\\(k => k.toLowerCase\\(\\).includes\\('magic'\\)\\).join\\(', '\\)\\); console.log\\('Right-like:', Object.keys\\(icons\\).filter\\(k => k.toLowerCase\\(\\).includes\\('right'\\)\\).join\\(', '\\)\\);\")",
+      "mcp__chrome-devtools__new_page",
+      "mcp__chrome-devtools__take_screenshot",
+      "Read(//c/Users/刘家瑞/AppData/Local/Temp/**)"
+    ]
+  }
+}

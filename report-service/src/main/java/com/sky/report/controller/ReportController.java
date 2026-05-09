@@ -1,9 +1,9 @@
 package com.sky.report.controller;
 
-import com.sky.order.service.OrderService;
-import com.sky.result.Result;
+import com.sky.gateway.utils.common.result.Result;
 import com.sky.report.service.ReportService;
-import com.sky.user.service.UserService;
+import com.sky.report.service.WorkspaceService;
+import com.sky.vo.BusinessDataVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Api(tags="管理端-数据统计")
 @Slf4j
@@ -23,6 +24,17 @@ import java.time.LocalDate;
 public class ReportController {
     @Autowired
     private ReportService reportService;
+
+    @Autowired
+    private WorkspaceService workspaceService;
+
+    @ApiOperation("区间经营数据")
+    @GetMapping("/businessData")
+    public Result<BusinessDataVO> businessData(@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
+                                               @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) {
+        log.info("区间经营数据：{}到{}", begin, end);
+        return Result.success(workspaceService.getBusinessData(begin.atStartOfDay(), end.atTime(LocalTime.MAX)));
+    }
 
     @ApiOperation("营业额统计")
     @GetMapping("/turnoverStatistics")

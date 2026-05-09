@@ -1,0 +1,35 @@
+<!--pages/setmeal/setmeal.wxml-->
+<view class="setmeal-page">
+  <image class="setmeal-hero" src="{{setmeal.image || '/images/placeholder.png'}}" mode="aspectFill" />
+
+  <view class="setmeal-info card">
+    <text class="setmeal-name">{{setmeal.name}}</text>
+    <text class="setmeal-desc" wx:if="{{setmeal.description}}">{{setmeal.description}}</text>
+    <view class="setmeal-price-row">
+      <view class="price-box">
+        <text class="price-unit">¥</text>
+        <text class="price-value">{{setmeal.price}}</text>
+      </view>
+      <text class="origin-price" wx:if="{{setmeal.originalPrice && setmeal.price < setmeal.originalPrice}}">¥{{setmeal.originalPrice}}</text>
+    </view>
+  </view>
+
+  <view class="setmeal-dishes card" wx:if="{{dishItems.length > 0}}">
+    <text class="section-title">套餐包含</text>
+    <view class="include-dish" wx:for="{{dishItems}}" wx:key="dishId">
+      <image class="include-img" src="{{item.image || '/images/placeholder.png'}}" mode="aspectFill" />
+      <view class="include-info">
+        <text class="include-name">{{item.name}}</text>
+        <text class="include-copies">x{{item.copies}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="fixed-bottom safe-bottom">
+    <view class="bottom-left">
+      <text class="bottom-price-unit">¥</text>
+      <text class="bottom-price">{{setmeal.price}}</text>
+    </view>
+    <button class="add-cart-btn" bindtap="addToCart">加入购物车</button>
+  </view>
+</view>

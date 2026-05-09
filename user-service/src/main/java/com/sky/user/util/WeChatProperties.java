@@ -18,5 +18,6 @@ public class WeChatProperties {
     private String weChatPayCertFilePath; //平台证书
     private String notifyUrl; //支付成功的回调地址
     private String refundNotifyUrl; //退款成功的回调地址
+    private Boolean devMode; //开发模式，跳过微信API调用，直接使用code作为openid
 
 }

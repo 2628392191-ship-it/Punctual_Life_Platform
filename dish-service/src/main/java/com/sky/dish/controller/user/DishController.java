@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,6 +28,14 @@ public class DishController {
     private DishService dishService;
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @ApiOperation("根据菜品id查询菜品详情")
+    @GetMapping("/detail/{id}")
+    public Result<DishVO> getById(@PathVariable Long id) {
+        log.info("查询菜品详情id：{}", id);
+        DishVO dishVO = dishService.findById(id);
+        return Result.success(dishVO);
+    }
 
     @ApiOperation("根据分类id查询菜品")
     @GetMapping("/list")

@@ -5,11 +5,8 @@ import com.github.xiaoymin.knife4j.core.util.StrUtil;
 
 import com.sky.gateway.utils.common.context.BaseContext;
 
-
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
-import org.springframework.stereotype.Component;
-
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;

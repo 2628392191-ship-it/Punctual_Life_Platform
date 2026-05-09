@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -33,6 +34,16 @@ public class ShoppingCartServiceImpl implements shoppingCartService {
     private DishClient dishClient;
     @Resource
     private SetmealClient setmealClient;
+    @Autowired
+    private HttpServletRequest request;
+
+    private Long getUserId() {
+        String userInfo = request.getHeader("user-info");
+        if (userInfo != null && !userInfo.isEmpty()) {
+            return Long.valueOf(userInfo);
+        }
+        return BaseContext.getCurrentId();
+    }
 
     /**
      * 添加购物车
@@ -101,7 +112,7 @@ public class ShoppingCartServiceImpl implements shoppingCartService {
     @Override
     public List<ShoppingCart> list(){
         ShoppingCart shoppingCart = ShoppingCart.builder()
-                .userId(BaseContext.getCurrentId())
+                .userId(getUserId())
                 .build();
         BaseContext.removeCurrentId();
         return shoppingcartmapper.list(shoppingCart);
@@ -112,7 +123,7 @@ public class ShoppingCartServiceImpl implements shoppingCartService {
      */
     @Override
     public void deleteCart(){
-        shoppingcartmapper.deleteByUserId(BaseContext.getCurrentId());
+        shoppingcartmapper.deleteByUserId(getUserId());
     }
 
     /**
@@ -123,7 +134,7 @@ public class ShoppingCartServiceImpl implements shoppingCartService {
      * @param amount
      */
     public void addShopCart(ShoppingCart shoppingCart, String name, String image, BigDecimal amount){
-        shoppingCart.setUserId(BaseContext.getCurrentId());
+        shoppingCart.setUserId(getUserId());
         shoppingCart.setName(name);
         shoppingCart.setImage(image);
         shoppingCart.setAmount(amount);

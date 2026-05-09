@@ -4,23 +4,29 @@ import com.alibaba.fastjson.JSONObject;
 
 import com.sky.dto.UserLoginDTO;
 import com.sky.entity.User;
+import com.sky.gateway.utils.common.constant.JwtClaimsConstant;
 import com.sky.gateway.utils.common.constant.MessageConstant;
 import com.sky.gateway.utils.common.exception.LoginFailedException;
 import com.sky.gateway.utils.common.util.HttpClientUtil;
-import com.sky.gateway.utils.common.util.WeChatProperties;
+import com.sky.user.util.WeChatProperties;
 import com.sky.user.mapper.UserMapper;
 import com.sky.user.service.UserService;
 import com.sky.vo.UserLoginVO;
 import com.sky.vo.UserReportVO;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +39,14 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
-    WeChatProperties weChatProperties;
+    @Autowired
+    private WeChatProperties weChatProperties;
+
+    @Value("${sky.jwt.user-secret-key}")
+    private String userSecretKey;
+
+    @Value("${sky.jwt.user-ttl}")
+    private long userTtl;
 
     /**
      * 统计用户数据
@@ -95,19 +108,18 @@ public class UserServiceImpl implements UserService {
                      .build();
              userMapper.insertUser(byOpenid);
         }
-    //TODO:用户生成token在网关实现
-        //设置token令牌
-//        Map<String,Object> claims = new HashMap<>();
-//        claims.put(JwtClaimsConstant.USER_ID,byOpenid.getId());
-//        String token= JwtUtil.createJWT(
-//                jwtProperties.getUserSecretKey(),
-//                jwtProperties.getUserTtl(),
-//                claims
-//        );
+        // 生成JWT令牌
+        Map<String,Object> claims = new HashMap<>();
+        claims.put(JwtClaimsConstant.USER_ID, byOpenid.getId());
+        String token = Jwts.builder()
+                .setClaims(claims)
+                .setExpiration(new Date(System.currentTimeMillis() + userTtl))
+                .signWith(SignatureAlgorithm.HS256, userSecretKey.getBytes(StandardCharsets.UTF_8))
+                .compact();
 
         UserLoginVO userLoginVO=UserLoginVO.builder()
                 .openid(byOpenid.getOpenid())
-//                .token(token)
+                .token(token)
                 .id(byOpenid.getId())
                 .build();
         return userLoginVO;
@@ -122,19 +134,27 @@ public class UserServiceImpl implements UserService {
 
         try {
             String json = HttpClientUtil.doGet(url,map);
-            // 添加日志记录
             log.info("微信接口返回: {}", json);
-            //将字符串变为json数据
             JSONObject jsonObject = JSONObject.parseObject(json);
-            // 检查是否有错误码
             if(jsonObject.containsKey("errcode")) {
-                log.error("微信接口错误: {}", jsonObject.getString("errmsg"));
+                Integer errcode = jsonObject.getInteger("errcode");
+                String errmsg = jsonObject.getString("errmsg");
+                log.warn("微信接口错误: errcode={}, errmsg={}", errcode, errmsg);
+                // 开发模式：使用code作为mock openid
+                if (weChatProperties.getDevMode() != null && weChatProperties.getDevMode()) {
+                    log.info("开发模式：使用code作为mock openid");
+                    return "dev_" + code;
+                }
                 return null;
             }
-            //返回json数据中的openid
             return jsonObject.getString("openid");
         } catch (Exception e) {
             log.error("调用微信接口异常", e);
+            // 开发模式下容错
+            if (weChatProperties.getDevMode() != null && weChatProperties.getDevMode()) {
+                log.info("开发模式：异常降级，使用code作为mock openid");
+                return "dev_" + code;
+            }
             return null;
         }
     }

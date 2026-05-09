@@ -5,6 +5,14 @@ sky:
     database: sky_take_out
     username: root
     password: ljr040209.
+  jwt:
+    user-secret-key: itheima
+    user-ttl: 7200000
+    user-token-name: userToken
+  wechat:
+    appid: wx2714016ddce042d8
+    secret: 5396a481383385dee3168448f6eed661
+    dev-mode: true
 #    notify-url: http://27b14551.r6.cpolar.cn/user/order/payment
 
 spring:

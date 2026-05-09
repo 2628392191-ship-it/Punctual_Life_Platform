@@ -1,0 +1,49 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/order/order",
+    "pages/cart/cart",
+    "pages/mine/mine",
+    "pages/login/login",
+    "pages/dish/dish",
+    "pages/setmeal/setmeal",
+    "pages/address/address",
+    "pages/payment/payment"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#ff6b35",
+    "navigationBarTitleText": "准时达生活平台",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f5f5f5"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#999999",
+    "selectedColor": "#ff6b35",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/order/order",
+        "text": "订单"
+      },
+      {
+        "pagePath": "pages/cart/cart",
+        "text": "购物车"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的"
+      }
+    ]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于获取配送地址位置信息"
+    }
+  },
+  "requiredPrivateInfos": ["chooseAddress", "chooseLocation"]
+}

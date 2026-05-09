@@ -1,0 +1,64 @@
+<!--pages/address/address.wxml-->
+<view class="address-page">
+  <!-- 头部 -->
+  <view class="address-header">
+    <text class="address-header-title">{{fromCart ? '确认订单' : '收货地址'}}</text>
+  </view>
+
+  <!-- 从购物车来的结账流程 -->
+  <view class="card" wx:if="{{fromCart}}">
+    <text class="section-title">订单明细</text>
+    <view class="cart-summary">
+      <view class="summary-item" wx:for="{{cartItems}}" wx:key="id">
+        <text>{{item.name}} x{{item.number}}</text>
+        <text class="price">¥{{item.lineTotal}}</text>
+      </view>
+      <view class="summary-total">
+        <text>合计</text>
+        <text class="price" style="font-size:18px;color:#ff4d4f;">¥{{totalPrice}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 地址列表 -->
+  <text class="address-list-title">选择地址</text>
+  <view class="address-list">
+    <view
+      class="address-item {{selectedAddress.id === item.id ? 'active' : ''}}"
+      wx:for="{{addresses}}"
+      wx:key="id"
+      bindtap="selectAddress"
+      data-item="{{item}}">
+      <view class="addr-top">
+        <text class="addr-name">{{item.consignee || item.name}}</text>
+        <text class="addr-phone">{{item.phone}}</text>
+        <view class="addr-tag" wx:if="{{item.isDefault == 1}}">默认</view>
+      </view>
+      <text class="addr-detail">{{item.provinceName || ''}}{{item.cityName || ''}}{{item.districtName || ''}}{{item.detail || item.address || ''}}</text>
+    </view>
+  </view>
+
+  <!-- 微信地址 -->
+  <view class="wx-addr-btn-wrap" wx:if="{{fromCart}}">
+    <button class="wx-addr-btn" bindtap="chooseWxAddress">+ 使用微信地址</button>
+  </view>
+
+  <!-- 备注 -->
+  <view class="card" wx:if="{{fromCart}}">
+    <text class="section-title">备注</text>
+    <input class="remark-input" placeholder="请输入备注信息（选填）" value="{{remark}}" bindinput="onRemarkInput" />
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="submit-area" wx:if="{{fromCart && selectedAddress}}">
+    <button class="submit-btn" loading="{{submitting}}" bindtap="submitOrder">
+      提交订单 ¥{{totalPrice}}
+    </button>
+  </view>
+
+  <view class="empty-state" wx:if="{{addresses.length === 0}}">
+    <text class="icon">📍</text>
+    <text>暂无收货地址</text>
+    <text class="empty-tip">请添加收货地址</text>
+  </view>
+</view>

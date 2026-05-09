@@ -23,6 +23,7 @@
         <module>employee-service</module>
         <module>shop-service</module>
         <module>report-service</module>
+        <module>ai-service</module>
         <module>gateway-service</module>
         <module>takeout-common</module>
         <module>takeout-api</module>

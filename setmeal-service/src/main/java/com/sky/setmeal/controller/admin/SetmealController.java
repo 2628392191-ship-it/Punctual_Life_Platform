@@ -75,14 +75,14 @@ public class SetmealController {
     }
 
     @ApiOperation("根据菜品id查询套餐")
-    @GetMapping("/{setmealId}")
+    @GetMapping("/dish/{setmealId}")
     public Result<List<DishItemVO>> getSetmealByDishIds(@PathVariable Long setmealId){
         List<DishItemVO> dishBySetmealbyId = setmealService.getDishBySetmealbyId(setmealId);
         return Result.success(dishBySetmealbyId);
     }
 
     @ApiOperation("根据状态查询套餐")
-    @GetMapping("/{status}")
+    @GetMapping("/list/{status}")
     Result<List<Setmeal>> listByStatus(@PathVariable Integer status){
          return Result.success(setmealService.listByStatus(status));
     }

@@ -1,0 +1,81 @@
+<!--pages/index/index.wxml-->
+<view class="home-page">
+  <!-- 顶部搜索栏 -->
+  <view class="header-bar">
+    <view class="header-left">
+      <image class="header-logo" src="/images/logo.png" mode="aspectFit" />
+      <text class="header-title">准时达</text>
+    </view>
+    <view class="header-right">
+      <view class="shop-badge {{shopOpen ? 'open' : 'closed'}}">
+        <text>{{shopOpen ? '营业中' : '已休息'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 分类导航 -->
+  <scroll-view class="category-bar" scroll-x enhanced show-scrollbar="{{false}}">
+    <view class="category-scroll">
+      <view
+        class="category-item {{currentCategory === 0 ? 'active' : ''}}"
+        bindtap="switchCategory"
+        data-id="0">
+        <view class="cate-icon-wrap">
+          <text class="cate-icon">🔥</text>
+        </view>
+        <text class="cate-name">全部</text>
+      </view>
+      <view
+        class="category-item {{currentCategory === item.id ? 'active' : ''}}"
+        wx:for="{{categories}}"
+        wx:key="id"
+        bindtap="switchCategory"
+        data-id="{{item.id}}">
+        <view class="cate-icon-wrap">
+          <text class="cate-icon">{{item.icon || '🍽️'}}</text>
+        </view>
+        <text class="cate-name">{{item.name}}</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 商品列表 -->
+  <scroll-view class="goods-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+    <!-- 今日推荐 -->
+    <view class="section-header" wx:if="{{goodsList.length > 0}}">
+      <text class="section-title">今日推荐</text>
+      <text class="section-sub">新鲜食材 · 准时送达</text>
+    </view>
+
+    <view class="goods-list" wx:if="{{goodsList.length > 0}}">
+      <view
+        class="goods-card"
+        wx:for="{{goodsList}}"
+        wx:key="key"
+        bindtap="goDetail"
+        data-item="{{item}}">
+        <image class="goods-img" src="{{item.image || '/images/placeholder.png'}}" mode="aspectFill" lazy-load />
+        <view class="goods-body">
+          <text class="goods-name">{{item.name}}</text>
+          <text class="goods-desc" wx:if="{{item.description}}">{{item.description}}</text>
+          <view class="goods-footer">
+            <view class="goods-price">
+              <text class="price-unit">¥</text>
+              <text class="price-num">{{item.price}}</text>
+            </view>
+            <view class="add-cart-btn" catchtap="addToCart" data-item="{{item}}">
+              <text class="add-icon">+</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="empty-state" wx:else>
+      <text class="empty-icon">📦</text>
+      <text class="empty-text">暂无商品</text>
+    </view>
+
+    <view class="bottom-safe"></view>
+  </scroll-view>
+</view>

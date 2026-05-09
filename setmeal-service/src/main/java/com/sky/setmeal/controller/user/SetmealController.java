@@ -6,6 +6,7 @@ import com.sky.gateway.utils.common.constant.StatusConstant;
 import com.sky.gateway.utils.common.result.Result;
 import com.sky.setmeal.service.SetmealService;
 import com.sky.vo.DishItemVO;
+import com.sky.vo.SetmealVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Api(tags = "用户端-套餐接口")
 @RestController("userSetmealController")
@@ -45,5 +48,17 @@ public class SetmealController {
         log.info("查询套餐id对应的菜品：{}", id);
         List<DishItemVO> setmealVOList = setmealService.getDishBySetmealbyId(id);
         return Result.success(setmealVOList);
+    }
+
+    @ApiOperation("查询套餐详情(套餐信息+包含菜品)")
+    @GetMapping("/detail/{id}")
+    public Result<Map<String, Object>> detail(@PathVariable Long id) {
+        log.info("查询套餐详情id：{}", id);
+        SetmealVO setmeal = setmealService.getById(id);
+        List<DishItemVO> dishItems = setmealService.getDishBySetmealbyId(id);
+        Map<String, Object> result = new HashMap<>();
+        result.put("setmeal", setmeal);
+        result.put("dishItems", dishItems);
+        return Result.success(result);
     }
 }

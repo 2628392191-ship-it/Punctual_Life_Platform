@@ -98,8 +98,9 @@ public class OrderController {
 
     @ApiOperation(("根据状态和日期来查询订单"))
     @GetMapping("/StatusAndDate")
-    public Result<List<Orders>> listByStatusAndDate(Integer status,LocalDateTime orderDate){
-        return Result.success(orderService.listByStatusAndDate(status,orderDate));
+    public Result<List<Orders>> listByStatusAndDate(@RequestParam Integer status,
+                                                     @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate orderDate){
+        return Result.success(orderService.listByStatusAndDate(status, orderDate.atStartOfDay()));
     }
 
     @ApiOperation("查询总订单")
@@ -109,13 +110,13 @@ public class OrderController {
     }
 
     @ApiOperation("当天营业额")
-    @GetMapping("/turnoverStatistics")
+    @PostMapping("/turnoverStatistics")
     public Result<Double> orderStatistics(@RequestBody Map<String ,Object> map){
         return Result.success(orderService.orderStatistics(map));
     }
 
     @ApiOperation("查询订单量")
-    @GetMapping("/orderCount")
+    @PostMapping("/orderCount")
     public Result<Integer> orderCount(@RequestBody Map<String ,Object> map){
         return Result.success(orderService.orderCount(map));
     }

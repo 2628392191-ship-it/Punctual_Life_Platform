@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,12 +61,13 @@ public class WorkspaceServiceImpl implements WorkspaceService {
        //需要将订单修改为当天订单信息，目前为所有的订单状态信息
        @Override
        public OrderOverViewVO overviewOrders(){
+             String today = LocalDate.now().toString();
              return OrderOverViewVO.builder()
                      .allOrders(orderClient.total().getData().size())
-                     .cancelledOrders(orderClient.listByStatusAndDate(Orders.CANCELLED, LocalDateTime.now()).getData().size())
-                     .completedOrders(orderClient.listByStatusAndDate(Orders.COMPLETED, LocalDateTime.now()).getData().size())
-                     .deliveredOrders(orderClient.listByStatusAndDate(Orders.DELIVERY_IN_PROGRESS, LocalDateTime.now()).getData().size())
-                     .waitingOrders(orderClient.listByStatusAndDate(Orders.TO_BE_CONFIRMED, LocalDateTime.now()).getData().size())
+                     .cancelledOrders(orderClient.listByStatusAndDate(Orders.CANCELLED, today).getData().size())
+                     .completedOrders(orderClient.listByStatusAndDate(Orders.COMPLETED, today).getData().size())
+                     .deliveredOrders(orderClient.listByStatusAndDate(Orders.DELIVERY_IN_PROGRESS, today).getData().size())
+                     .waitingOrders(orderClient.listByStatusAndDate(Orders.TO_BE_CONFIRMED, today).getData().size())
                      .build();
        }
 

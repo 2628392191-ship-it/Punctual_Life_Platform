@@ -1,0 +1,102 @@
+/* 准时达生活平台 - 全局样式 */
+
+page {
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Helvetica, 'Microsoft YaHei', Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* 安全区适配 */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* 通用按钮 */
+.btn-primary {
+  background-color: #1677ff;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* 卡片 */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  margin: 12px;
+  padding: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  color: #ccc;
+}
+
+.empty-state .icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+}
+
+.empty-state text {
+  font-size: 14px;
+  color: #999;
+}
+
+/* 价格 */
+.price {
+  color: #ff4d4f;
+  font-weight: 600;
+}
+
+.price-symbol {
+  font-size: 12px;
+}
+
+.price-value {
+  font-size: 18px;
+}
+
+/* 标签 */
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  margin-right: 6px;
+}
+
+.tag-blue {
+  background: #e6f7ff;
+  color: #1677ff;
+}
+
+.tag-green {
+  background: #f6ffed;
+  color: #52c41a;
+}
+
+.tag-orange {
+  background: #fff7e6;
+  color: #fa8c16;
+}
+
+.tag-red {
+  background: #fff1f0;
+  color: #ff4d4f;
+}
+
+/* 省略号 */
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

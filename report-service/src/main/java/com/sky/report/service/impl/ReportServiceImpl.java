@@ -114,22 +114,22 @@ public class ReportServiceImpl implements ReportService  {
 
     @Override
     public TurnoverReportVO turnoverStatistics(LocalDate begin, LocalDate end) {
-        return orderClient.reportTurnoverStatistics(begin, end);
+        return orderClient.reportTurnoverStatistics(begin, end).getData();
     }
 
     @Override
     public UserReportVO userStatistics(LocalDate begin, LocalDate end) {
-       return userClient.userStatistics(begin, end);
+       return userClient.userStatistics(begin, end).getData();
     }
 
     @Override
     public OrderReportVO ordersStatistics(LocalDate begin, LocalDate end) {
-        return orderClient.orderStatistics(begin, end);
+        return orderClient.orderStatistics(begin, end).getData();
     }
 
     @Override
     public SalesTop10ReportVO top10(LocalDate begin, LocalDate end) {
-        return orderClient.top10(begin, end);
+        return orderClient.top10(begin, end).getData();
     }
 
 }

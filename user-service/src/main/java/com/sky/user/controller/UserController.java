@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @ApiOperation("查询当天用户统计")
-    @GetMapping("/statistics")
+    @PostMapping("/statistics")
     Result<Integer> UserStatisticsTotal(@RequestBody Map<String, Object> map){
         return Result.success(userService.UserStatisticsTotal(map));
     }

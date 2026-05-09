@@ -1,6 +1,6 @@
 package com.sky.report.controller;
 
-import com.sky.result.Result;
+import com.sky.gateway.utils.common.result.Result;
 import com.sky.report.service.WorkspaceService;
 import com.sky.vo.BusinessDataVO;
 import io.swagger.annotations.Api;
