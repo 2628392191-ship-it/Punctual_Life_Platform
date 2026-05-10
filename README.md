@@ -46,8 +46,7 @@
 
 | 属性 | 值 |
 |---|---|
-| **项目名称** | `sky-take-out2` |
-| **Group ID** | `com.sky` |
+| **项目名称** | `Punctual Life Platform` |
 | **版本号** | `1.0-SNAPSHOT` |
 | **Java 版本** | `17` |
 | **构建工具** | Maven（多模块） |
